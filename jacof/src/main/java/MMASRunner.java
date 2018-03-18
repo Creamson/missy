@@ -15,13 +15,13 @@ public class MMASRunner {
 	
 	public static void main(String[] args) throws ParseException, IOException {
 
-		String instance = "src/main/resources/problems/tsp/kroA100.tsp";
+		String instance = "src/main/resources/problems/tsp/oliver30.tsp";
 
 		Problem problem = new TravellingSalesmanProblem(instance);
 
 		MaxMinAntSystem aco = new MaxMinAntSystem(problem);
 
-		aco.setNumberOfAnts(100);
+		aco.setNumberOfAnts(30);
 		aco.setNumberOfIterations(1);
 		aco.setAlpha(1.0);
 		aco.setBeta(2.0);
@@ -30,10 +30,6 @@ public class MMASRunner {
 
 		ExecutionStats es = ExecutionStats.execute(aco, problem);
 		es.printStats();
-        es.aco.setNumberOfIterations(3);
-        es = ExecutionStats.execute2(es.aco, es.problem);
-        es.printStats();
-        System.out.print(es.aco.getGraph().toString());
 	}
 
 }

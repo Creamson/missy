@@ -39,19 +39,6 @@ public class ExecutionStats {
 		return ets;
 	}
 
-    public static ExecutionStats execute2(ACO aco, Problem problem) {
-        ExecutionStats ets = new ExecutionStats();
-
-        ets.aco = aco;
-        ets.problem = problem;
-
-        long initTime = System.currentTimeMillis();
-        ets.bestSolution = aco.solve2();
-        ets.executionTime = System.currentTimeMillis() - initTime ;
-
-        return ets;
-    }
-
 	public void printStats() {
 		LOGGER.info("==================================================");
 		LOGGER.info("Execution Time: " + executionTime);

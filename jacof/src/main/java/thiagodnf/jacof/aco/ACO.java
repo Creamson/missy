@@ -109,43 +109,26 @@ public abstract class ACO implements Observer {
 	 * @return the best solution found by the ants
 	 */
 	public int[] solve() {
+		
+		LOGGER.info("Starting ACO");
+		
+		build();
+		
+		printParameters();
 
-        LOGGER.info("Starting ACO");
+		initializePheromones();
+		initializeAnts();
 
-        build();
+		while (!terminationCondition()) {
+			constructAntsSolutions();
+			updatePheromones();
+			daemonActions(); // optional
+		}
+		
+		LOGGER.info("Done");
 
-        printParameters();
-
-        initializePheromones();
-        initializeAnts();
-
-        while (!terminationCondition()) {
-            constructAntsSolutions();
-            updatePheromones();
-            daemonActions(); // optional
-        }
-
-        LOGGER.info("Done");
-
-        return globalBest.getSolution();
-    }
-
-    public int[] solve2() {
-
-        LOGGER.info("Starting ACO");
-
-        printParameters();
-
-        while (!terminationCondition()) {
-            constructAntsSolutions();
-            updatePheromones();
-            daemonActions(); // optional
-        }
-
-        LOGGER.info("Done");
-
-        return globalBest.getSolution();
-    }
+		return globalBest.getSolution();
+	}
 	
 	/**
 	 * Initialize the pheromone values. This method creates a 
