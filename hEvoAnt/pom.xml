@@ -7,6 +7,18 @@
     <groupId>com.missy</groupId>
     <artifactId>hEvoAnt</artifactId>
     <version>1.0.0</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <dependency>
             <groupId>org.uma.jmetal</groupId>
@@ -37,6 +49,11 @@
             <groupId>thiagodnf.jacof</groupId>
             <artifactId>jacof</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
         </dependency>
     </dependencies>
 
