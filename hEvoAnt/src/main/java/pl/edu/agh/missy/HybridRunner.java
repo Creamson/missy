@@ -31,11 +31,13 @@ import java.util.Optional;
 
 public class HybridRunner {
 
+    private static final int NUMBER_OF_ITERATIONS = 5;
+
     public static void main(String[] args) throws IOException {
         ExecutionStats stats = null;
         List<PermutationSolution<Integer>> population = null;
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
             population = runGeneticSample(stats);
             stats = runAntSample(population);
         }

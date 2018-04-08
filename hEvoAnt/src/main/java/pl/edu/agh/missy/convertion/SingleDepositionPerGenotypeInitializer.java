@@ -38,8 +38,9 @@ public class SingleDepositionPerGenotypeInitializer implements PheromonesInitial
         for (int i = 0; i < problem.getNumberOfNodes(); i++) {
             for (int j = i; j < problem.getNumberOfNodes(); j++) {
                 if (i != j) {
-                        graph.setTau(i, j, deposit.getTheNewValue(i, j));
-                        graph.setTau(j, i, graph.getTau(i, j));
+                    double newVal = deposit.getTheNewValue(i, j);
+                    graph.setTau(i, j, deposit.getTheNewValue(i, j));
+                    graph.setTau(j, i, graph.getTau(i, j));
                 }
             }
         }
@@ -51,12 +52,16 @@ public class SingleDepositionPerGenotypeInitializer implements PheromonesInitial
                 .map(genotype -> {
                     Ant ant = new Ant(aco, antIds.getAndIncrement());
                     DefaultIntegerPermutationSolution path = (DefaultIntegerPermutationSolution) genotype;
+                    int[] solution = new int[path.getNumberOfVariables()];
                     IntStream.range(0, path.getNumberOfVariables() - 1).forEach(index -> {
                         int v1 = path.getVariableValue(index);
                         int v2 = path.getVariableValue(index + 1);
                         ant.path[v1][v2] = 1;
                         ant.path[v2][v1] = 1;
+                        solution[index] = path.getVariableValue(index);
                     });
+                    solution[path.getNumberOfVariables()-1] = path.getVariableValue(path.getNumberOfVariables()-1);
+                    ant.setTourLength(aco.getProblem().evaluate(solution));
                     return ant;
                 })
                 .collect(toList());
