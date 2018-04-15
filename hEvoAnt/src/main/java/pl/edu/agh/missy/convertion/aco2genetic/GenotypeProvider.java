@@ -1,4 +1,4 @@
-package pl.edu.agh.missy.convertion;
+package pl.edu.agh.missy.convertion.aco2genetic;
 
 import org.uma.jmetal.solution.PermutationSolution;
 

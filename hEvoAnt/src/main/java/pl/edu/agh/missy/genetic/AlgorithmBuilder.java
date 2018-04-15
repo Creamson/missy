@@ -10,11 +10,10 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
-import pl.edu.agh.missy.convertion.GenotypeProvider;
+import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * Created by ajnebro on 10/12/14.

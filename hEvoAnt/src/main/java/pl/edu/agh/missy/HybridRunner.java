@@ -16,8 +16,9 @@ import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import org.uma.jmetal.util.fileoutput.SolutionListOutput;
 import org.uma.jmetal.util.fileoutput.impl.DefaultFileOutputContext;
 import pl.edu.agh.missy.ants.CustomInitializationAntSystem;
-import pl.edu.agh.missy.convertion.SimpleLastPathBasedGenotypeProvider;
-import pl.edu.agh.missy.convertion.SingleDepositionPerGenotypeInitializer;
+import pl.edu.agh.missy.convertion.aco2genetic.CoinFlipGenotypeProvider;
+import pl.edu.agh.missy.convertion.aco2genetic.SimpleLastPathBasedGenotypeProvider;
+import pl.edu.agh.missy.convertion.genetic2aco.SingleDepositionPerGenotypeInitializer;
 import pl.edu.agh.missy.genetic.AlgorithmBuilder;
 import thiagodnf.jacof.aco.AntSystem;
 import thiagodnf.jacof.problem.Problem;
@@ -47,7 +48,7 @@ public class HybridRunner {
         Problem tsp = new TravellingSalesmanProblem("in/kroB100.tsp");
         //ahoy
         AntSystem aco = Optional.ofNullable(population)
-                .map(SingleDepositionPerGenotypeInitializer::new)
+                .map(p -> new SingleDepositionPerGenotypeInitializer(p, 1.0))
                 .map(initializer -> new CustomInitializationAntSystem(initializer, tsp))
                 .orElse(new CustomInitializationAntSystem(tsp));
 
@@ -84,9 +85,10 @@ public class HybridRunner {
                 .setMaxEvaluations(250000)
                 .setSelectionOperator(selection);
 
-        Optional.ofNullable(executionStats).ifPresent(stats -> {
-            algorithmBuilder.setGenotypeProvider(new SimpleLastPathBasedGenotypeProvider(problem, stats));
-        });
+        Optional.ofNullable(executionStats).ifPresent(stats ->
+                // TODO Change the provider at wish
+                algorithmBuilder.setGenotypeProvider(new CoinFlipGenotypeProvider(problem, stats))
+        );
 
         algorithm = algorithmBuilder
                 .buildAsGenerational();

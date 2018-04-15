@@ -6,13 +6,11 @@ import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.PermutationSolution;
-import pl.edu.agh.missy.convertion.GenotypeProvider;
-import pl.edu.agh.missy.convertion.SimpleLastPathBasedGenotypeProvider;
+import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class CustomInitializationSteadyStateGeneticAlgorithm extends SteadyStateGeneticAlgorithm<PermutationSolution<Integer>> {
 

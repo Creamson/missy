@@ -1,4 +1,4 @@
-package pl.edu.agh.missy.convertion;
+package pl.edu.agh.missy.convertion.genetic2aco;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.uma.jmetal.solution.PermutationSolution;
@@ -18,16 +18,21 @@ import static java.util.stream.Collectors.toList;
 public class SingleDepositionPerGenotypeInitializer implements PheromonesInitializer {
 
     private final List<PermutationSolution<Integer>> population;
+    private double depositionRate = 1.0;
 
     public SingleDepositionPerGenotypeInitializer(List<PermutationSolution<Integer>> population) {
         this.population = population;
+    }
+    public SingleDepositionPerGenotypeInitializer(List<PermutationSolution<Integer>> population, double depositionRate) {
+        this.population = population;
+        this.depositionRate = depositionRate;
     }
 
     @Override
     public void initializePheromones(ACO aco) {
         List<Ant> initializationAnts = createAntsWithPathsFromGenotypes(aco);
 
-        PartialDeposit deposit = new PartialDeposit(aco, 1.0, new InitializationAntSet(aco, initializationAnts));
+        PartialDeposit deposit = new PartialDeposit(aco, depositionRate, new InitializationAntSet(aco, initializationAnts));
         depositInitialPheromones(aco, deposit);
     }
 

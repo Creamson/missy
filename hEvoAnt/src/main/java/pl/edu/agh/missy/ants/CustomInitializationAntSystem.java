@@ -1,6 +1,6 @@
 package pl.edu.agh.missy.ants;
 
-import pl.edu.agh.missy.convertion.PheromonesInitializer;
+import pl.edu.agh.missy.convertion.genetic2aco.PheromonesInitializer;
 import thiagodnf.jacof.aco.AntSystem;
 import thiagodnf.jacof.problem.Problem;
 

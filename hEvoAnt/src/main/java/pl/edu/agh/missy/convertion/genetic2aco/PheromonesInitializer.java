@@ -1,4 +1,4 @@
-package pl.edu.agh.missy.convertion;
+package pl.edu.agh.missy.convertion.genetic2aco;
 
 import thiagodnf.jacof.aco.ACO;
 

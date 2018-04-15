@@ -7,7 +7,7 @@ import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import pl.edu.agh.missy.convertion.GenotypeProvider;
+import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
 
 import java.util.ArrayList;
 import java.util.List;
