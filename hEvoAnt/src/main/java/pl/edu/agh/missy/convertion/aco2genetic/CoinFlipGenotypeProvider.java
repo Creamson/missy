@@ -33,9 +33,7 @@ public class CoinFlipGenotypeProvider implements GenotypeProvider {
         nextAnt.run();
         return new JMetalIntegerPermuationSolution(
                 problem,
-                Arrays.stream(nextAnt.getSolution())
-                        .boxed()
-                        .collect(toList())
+                nextAnt.tour
         );
     }
 
