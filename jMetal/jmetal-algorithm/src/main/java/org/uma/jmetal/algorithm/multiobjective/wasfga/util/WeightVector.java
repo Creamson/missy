@@ -13,29 +13,11 @@ import java.util.Vector;
  * @author Rubén Saborido Infantes
  * This class offers different methods to manipulate weight vectors.
  */
-public class WeightVectors {
-	/**
-	 * Validate if the number of components of all weight vectors has the expected dimensionality.
-	 *
-	 * @param weights Weight vectors to validate
-	 * @param numberOfComponents Number of components each weight vector must have
-	 * @return True if the weight vectors are correct, False if the weight vectors are incorrect
-	 */
-	public static boolean validate (double[][] weights, int numberOfComponents) {
-		int i;
-		boolean correct;
-		correct = (weights != null && weights.length > 0);
-
-		i = 0;
-		while (correct && i < weights.length)
-		{
-			correct = (weights[i].length == numberOfComponents);
-			i++;
-		}
-
-		return correct;
-	}
-
+public class WeightVector {
+	public enum NORMALIZE {TRUE, FALSE}
+	
+	;
+	
 	/**
 	 * Generate uniform weight vectors in two dimension
 	 *
@@ -43,7 +25,7 @@ public class WeightVectors {
 	 * @param numberOfWeights Number of weight vectors to generate
 	 * @return A set of weight vectors
 	 */
-	public static double[][] initializeUniformlyInTwoDimensions(double epsilon, int numberOfWeights) {
+	public double[][] initUniformWeights2D(double epsilon, int numberOfWeights) {
 		double[][] weights = new double[numberOfWeights][2];
 		
 		int indexOfWeight;
@@ -73,18 +55,18 @@ public class WeightVectors {
 	 * @param filePath The name of file in the resources folder of jMetal
 	 * @return A set of weight vectors
 	 */
-	public static double[][] readFromResourcesInJMetal(String filePath) {
-		double[][] weights;
+	public double[][] getWeightsFromResourcesInJMetal(String filePath) {
+		double[][] weights = new double[0][0];
 
-		Vector<double[]> listOfWeights = new Vector<>();
+		Vector<double[]> listOfWeights = new Vector<double[]>();
 
 		try {
-			InputStream in = WeightVectors.class.getResourceAsStream("/" + filePath);
+			InputStream in = getClass().getResourceAsStream("/" + filePath);
 			InputStreamReader isr = new InputStreamReader(in);
 			BufferedReader br = new BufferedReader(isr);
 
 			int numberOfObjectives = 0;
-			int j;
+			int j = 0;
 			String aux = br.readLine();
 			while (aux != null) {
 				StringTokenizer st = new StringTokenizer(aux);
@@ -107,7 +89,7 @@ public class WeightVectors {
 				System.arraycopy(listOfWeights.get(indexWeight), 0, weights[indexWeight], 0, numberOfObjectives);
 			}
 		} catch (Exception e) {
-			throw new JMetalException("readFromResourcesInJMetal: failed when reading for file: " + filePath + "", e);
+			throw new JMetalException("getWeightsFromResourcesInJMetal: failed when reading for file: " + filePath + "", e);
 		}
 
 		return weights;
@@ -119,19 +101,20 @@ public class WeightVectors {
 	 * @param filePath A file containing the weight vectors
 	 * @return A set of weight vectors
 	 */
-	public static double[][] readFromFile(String filePath) {
-		double[][] weights;
+	public double[][] getWeightsFromFile(String filePath) {
+		double[][] weights = new double[0][0];
 		
-		Vector<double[]> listOfWeights = new Vector<>();
+		Vector<double[]> listOfWeights = new Vector<double[]>();
 		
 		try {
-			// Open the file
-			FileInputStream fis = new FileInputStream(filePath);
-			InputStreamReader isr = new InputStreamReader(fis);
-			BufferedReader br = new BufferedReader(isr);
+
+			  // Open the file
+			  FileInputStream fis = new FileInputStream(filePath);
+			  InputStreamReader isr = new InputStreamReader(fis);
+			  BufferedReader br = new BufferedReader(isr);
 			
 			int numberOfObjectives = 0;
-			int j;
+			int j = 0;
 			String aux = br.readLine();
 			while (aux != null) {
 				StringTokenizer st = new StringTokenizer(aux);
@@ -154,7 +137,7 @@ public class WeightVectors {
 				System.arraycopy(listOfWeights.get(indexWeight), 0, weights[indexWeight], 0, numberOfObjectives);
 			}
 		} catch (Exception e) {
-			throw new JMetalException("readFromFile: failed when reading for file: " + filePath + "", e);
+			throw new JMetalException("getWeightsFromFile: failed when reading for file: " + filePath + "", e);
 		}
 		
 		return weights;
@@ -164,14 +147,14 @@ public class WeightVectors {
 	 * Calculate the inverse of a set of weight vectors
 	 *
 	 * @param weights A set of weight vectors
-	 * @param normalize True if the weights should be normalize by the sum of the components
+	 * @param b       True if the weights should be normalize by the sum of the components
 	 * @return A set of weight vectors
 	 */
-	public static double[][] invert(double[][] weights, boolean normalize) {
+	public static double[][] invertWeights(double[][] weights, boolean b) {
 		double[][] result = new double[weights.length][weights[0].length];
 		
 		for (int indexOfWeight = 0; indexOfWeight < weights.length; indexOfWeight++) {
-			if (normalize) {
+			if (b) {
 				double sum = 0;
 				
 				for (int indexOfComponent = 0; indexOfComponent < weights[indexOfWeight].length; indexOfComponent++) {

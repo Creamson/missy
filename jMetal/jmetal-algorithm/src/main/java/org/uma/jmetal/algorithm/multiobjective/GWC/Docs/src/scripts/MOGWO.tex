@@ -1,0 +1,39 @@
+\begin{algorithm}[H]
+\caption{MOGWO}
+\begin{algorithmic}
+\STATE Losowa inicjalizacja populacji $X_i (i = 1, 2, ..., n)$ Osobnik jest reprezentowany przez n-wymiarowy wektor liczb rzeczywistych, gdzie n to liczba argumentów optymalizowanego problemu.
+\STATE Inicjalizacja $a$, $A$, $C$
+\STATE Oblicz wartości kryteriów dla każdego agenta
+\STATE Znajdź niezdominowane rozwiązania i zainicjalizuj nimi archiwum
+\STATE $X_{\alpha} = WybierzLidera(archiwum)$
+\STATE Wyłącz $\alpha$ tymczasowo z archiwum, aby nie wybrać tego samego lidera
+\STATE $X_{\beta} = WybierzLidera(archiwum)$ 
+\STATE Wyłącz $\beta$ tymczasowo z archiwum,  aby nie wybrać tego samego lidera
+\STATE $X_{\delta} = WybierzLidera(archiwum)$
+\STATE Dodaj $\alpha$, $\beta$ do archiwum
+\WHILE{t < maksymalna liczba iteracji}
+    \FORALL{agent}
+        \STATE Aktualizacja pozycji 
+    \ENDFOR
+    \STATE Aktualizacja $a$, $A$, $C$
+    \STATE Oblicz wartości kryteriów dla każdego agenta
+    \STATE Znajdź niezdominowane rozwiązania
+    \STATE Zaktualizuj archiwum zgodnie z otrzymanymi niezdominowanymi rozwiązaniami
+    \IF{Archiwum jest pełne}
+    	\STATE Usuń jedno z aktualnych rozwiązań w archiwum
+    	\STATE Dodaj nowe rozwiązanie do archiwum 
+    \ENDIF
+    \IF{jakiekolwiek z nowo dodanych rozwiązań jest zlokalizowane poza hiperkostkami}
+    	\STATE Zaktualizauj siatkę tak, aby pokrywała wszystkie rozwiązania (uruchom mechanizm siatki)
+    \ENDIF
+    \STATE $X_{\alpha} = WybierzLidera(archiwum)$
+	\STATE Wyłącz $\alpha$ tymczasowo z archiwum, aby nie wybrać tego samego lidera
+	\STATE $X_{\beta} = WybierzLidera(archiwum)$ 
+	\STATE Wyłącz $\beta$ tymczasowo z archiwum,  aby nie wybrać tego samego lidera
+	\STATE $X_{\delta} = WybierzLidera(archiwum)$
+	\STATE Dodaj $\alpha$, $\beta$ do archiwum
+    \STATE $t = t + 1$
+\ENDWHILE
+\STATE return $archiwum$
+\end{algorithmic}
+\end{algorithm}

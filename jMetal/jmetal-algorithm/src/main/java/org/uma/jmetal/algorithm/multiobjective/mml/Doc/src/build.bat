@@ -1,0 +1,1 @@
+pandoc --number-sections --table-of-contents --standalone -o ../build/mml.pdf mml_header.yaml mml_doc.md

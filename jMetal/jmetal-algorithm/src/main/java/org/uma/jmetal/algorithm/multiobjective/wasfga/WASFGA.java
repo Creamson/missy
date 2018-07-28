@@ -4,8 +4,9 @@ import org.uma.jmetal.algorithm.InteractiveAlgorithm;
 import org.uma.jmetal.algorithm.multiobjective.mombi.AbstractMOMBI;
 import org.uma.jmetal.algorithm.multiobjective.mombi.util.ASFWASFGA;
 import org.uma.jmetal.algorithm.multiobjective.mombi.util.AbstractUtilityFunctionsSet;
+import org.uma.jmetal.algorithm.multiobjective.mombi.util.Normalizer;
 import org.uma.jmetal.algorithm.multiobjective.wasfga.util.WASFGARankingConstraint;
-import org.uma.jmetal.algorithm.multiobjective.wasfga.util.WeightVectors;
+import org.uma.jmetal.algorithm.multiobjective.wasfga.util.WeightVector;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
@@ -36,6 +37,7 @@ public class WASFGA<S extends Solution<?>> extends AbstractMOMBI<S> implements
 	private static final long serialVersionUID = 1L;
 	protected int maxEvaluations;
 	protected int evaluations;
+	protected Normalizer normalizer;
 	protected double epsilon ;
 	protected double[][] weights;
 	
@@ -95,40 +97,32 @@ public class WASFGA<S extends Solution<?>> extends AbstractMOMBI<S> implements
 	}
 
 	public AbstractUtilityFunctionsSet<S> createUtilityFunction() {
+		WeightVector weightVector = new WeightVector() ;
+
 		//If a file with weight vectors is not given as parameter, weights are calculated or read from the resources file of jMetal
 		if ("".equals(this.weightVectorsFileName)) {
 			//For two biobjective problems weights are computed
 			if (problem.getNumberOfObjectives() == 2) {
-				weights = WeightVectors.initializeUniformlyInTwoDimensions(epsilon, getMaxPopulationSize());
+				weights = weightVector.initUniformWeights2D(epsilon, getMaxPopulationSize());
 			}
 			//For more than two objectives, weights are read from the resources file of jMetal
 			else {
 				String dataFileName = "W" + problem.getNumberOfObjectives() + "D_" + getMaxPopulationSize() + ".dat";
-				weights = WeightVectors.readFromResourcesInJMetal("MOEAD_Weights/" + dataFileName);
+				weights = weightVector.getWeightsFromResourcesInJMetal("MOEAD_Weights/" + dataFileName);
 			}
 		} else { //If a file with weight vectors is given as parameter, weights are read from that file
-			weights = WeightVectors.readFromFile(this.weightVectorsFileName) ;
+			weights = weightVector.getWeightsFromFile(this.weightVectorsFileName) ;
 		}
-		weights = WeightVectors.invert(weights,true);
-
-		//We validate that the weight vectors are valid:
-		//The number of components of each weight is similar to the number of objectives of the problem being solved.
-		if (!WeightVectors.validate(weights, problem.getNumberOfObjectives()))
-		{
-			throw new JMetalException("Weight vectors are invalid. Check that weight vectors have as many components" +
-					" as objectives the problem being solved has.") ;
-		}
-
-		//By default, the algorithm uses as many weight vectors as individual in the population.
-		//In a future, a new parameter should be added to specify the number of weight vectors to use.
-		//As it is mentioned in the paper, the number of weight vectors must lower than or equal to the population size.
+		weights = WeightVector.invertWeights(weights,true);
+		
 		if (weights.length != maxPopulationSize) {
-			throw new JMetalException("The number of weight vectors (" + weights.length +") and the population size (" +
-							maxPopulationSize + ") have different values. This behaviour will change in a future " +
-					"version.") ;
+			throw new JMetalException("The number of weight vectors (" + weights.length +") and the population size(" +
+							maxPopulationSize + ") have different values") ;
 		}
+		
+		ASFWASFGA<S> aux = new ASFWASFGA<>(weights, interestPoint);
 
-		return new ASFWASFGA<>(weights, interestPoint);
+		return aux;
 	}
 
 	public void updatePointOfInterest(List<Double> newPointOfInterest) {
@@ -159,18 +153,18 @@ public class WASFGA<S extends Solution<?>> extends AbstractMOMBI<S> implements
 		ranking.computeRanking(solutionList);
 		return ranking;
 	}
-
-    protected void addRankedSolutionsToPopulation(Ranking<S> ranking, int index, List<S> population) {
+	
+	protected void addRankedSolutionsToPopulation(Ranking<S> ranking, int index, List<S> population) {
 		population.addAll(ranking.getSubfront(index));
 	}
-
-    protected void addLastRankedSolutionsToPopulation(Ranking<S> ranking, int index, List<S> population) {
+	
+	protected void addLastRankedSolutionsToPopulation(Ranking<S> ranking,int index, List<S>population) {
 		List<S> front 	= ranking.getSubfront(index);
 		int remain 		= this.getPopulationSize() - population.size();
 		population.addAll(front.subList(0, remain));
 	}
-
-    protected List<S> selectBest(Ranking<S> ranking) {
+	
+	protected List<S> selectBest(Ranking<S> ranking) {
 		List<S> population = new ArrayList<>(this.getPopulationSize());
 		int rankingIndex = 0;
 
@@ -188,11 +182,13 @@ public class WASFGA<S extends Solution<?>> extends AbstractMOMBI<S> implements
 	private boolean subfrontFillsIntoThePopulation(Ranking<S> ranking, int index, List<S> population) {
 		return (population.size()+ranking.getSubfront(index).size() < this.getPopulationSize());
 	}
-
+	protected AbstractUtilityFunctionsSet<S> getUtilityFunctions() {
+		return this.achievementScalarizingFunction;
+	}
+	
 	@Override public List<S> getResult() {
 		return getNonDominatedSolutions(getPopulation());
 	}
-
 	protected List<S> getNonDominatedSolutions(List<S> solutionList) {
 		return SolutionListUtils.getNondominatedSolutions(solutionList);
 	}
@@ -204,4 +200,7 @@ public class WASFGA<S extends Solution<?>> extends AbstractMOMBI<S> implements
 	@Override public String getDescription() {
 		return "Weighting Achievement Scalarizing Function Genetic Algorithm" ;
 	}
+
+
+
 }

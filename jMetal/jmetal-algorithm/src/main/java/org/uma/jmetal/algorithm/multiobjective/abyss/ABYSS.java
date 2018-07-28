@@ -37,6 +37,8 @@ import javax.management.JMException;
  *   @author Cristobal Barba
  */
 @SuppressWarnings("serial")
+
+
 public class ABYSS extends AbstractScatterSearch<DoubleSolution, List<DoubleSolution>> {
   protected final int maxEvaluations ;
   protected final Problem<DoubleSolution> problem;

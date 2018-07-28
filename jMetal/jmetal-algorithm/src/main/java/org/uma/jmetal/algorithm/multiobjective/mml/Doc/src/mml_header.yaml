@@ -1,0 +1,29 @@
+---
+title: Multiobjective Machine Learning w systemie typu ,,money laundering detection``
+subtitle: |
+  Dokumentacja projektu studenckiego ,,Multiobjective Machine Learning w systemie typu money maundering detection`` realizowanego w ramach przedmiotu Modelowanie i Symulacja Systemów
+author: |
+  Piotr Grabiec
+date: 2018-04-05
+abstract: |
+  W dokumencie zebrano oraz omowiono wyniki prac realizowanych w trakcje projektu.
+  Projekt polega na zastosowaniu polioptymalizacji w uczeniu maszynowym na przykładzie systemu typu money laundering.
+  Najistotniejsze prace i osiągnięte w trakcie realizacji wyniki obejmują:
+  \begin{itemize}
+    \item analizę zastosowania polioptymalizacji w uczeniu maszynowym
+  \end{itemize}
+geometry: margin=6em
+header-includes:
+  - \usepackage{mathrsfs}
+  - \usepackage{amssymb}
+  - \usepackage{empheq}
+  - \usepackage{braket}
+  - \usepackage{empheq}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{color}
+  - \usepackage{listings}
+  - \usepackage{mathtools}
+  - \newtheorem{definition}{Definicja}
+---
+\newpage

@@ -1,0 +1,1 @@
+pandoc --number-sections --table-of-contents --standalone -o ../build/TumorInverseEvolutionLS.pdf header.yaml doc.md

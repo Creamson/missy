@@ -1,0 +1,24 @@
+﻿---
+title: Koncepcja Algorytmu Chwastowego
+author: |
+  Mateusz Kasznia
+date: 2018-03-15
+abstract: |
+  W dokumencie znajduje się opracowanie na temat algorytmu chwastowego w kontekście jego zastosowania dla polioptymalizacji.
+geometry: margin=6em
+header-includes:
+  - \usepackage{mathrsfs}
+  - \usepackage{amssymb}
+  - \usepackage{empheq}
+  - \usepackage{braket}
+  - \usepackage{empheq}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{color}
+  - \usepackage{listings}
+  - \usepackage{mathtools}
+  - \usepackage{algorithm}
+  - \usepackage{algpseudocode}
+  - \newtheorem{definition}{Definicja}
+---
+\newpage

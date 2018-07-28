@@ -1,0 +1,21 @@
+\begin{algorithm}[H]
+\caption{GWO}
+\begin{algorithmic}
+\STATE Losowa inicjalizacja populacji $X_i (i = 1, 2, ..., n)$ Osobnik jest reprezentowany przez n-wymiarowy wektor liczb rzeczywistych, gdzie n to liczba argumentów optymalizowanej funkcji.
+\STATE Inicjalizacja $a$, $A$, $C$
+\STATE Obliczenie wartości funkcji dopasowania dla każdego agenta 
+\STATE $X_{\alpha} = $ osobnik o najlepszym dostosowaniu
+\STATE $X_{\beta} = $ osobnik o drugim najlepszym dostosowaniu
+\STATE $X_{\delta} = $ osobnik o trzecim najlepszym dostosowaniu
+\WHILE{t < maksymalna liczba iteracji}
+    \FORALL{agent}
+        \STATE Aktualizacja pozycji zgodnie z równaniem (11)
+    \ENDFOR
+    \STATE Aktualizacja $a$, $A$, $C$
+    \STATE Obliczenie wartości funkcji dopasowania dla każdego agenta 
+    \STATE Aktualizacja $X_\alpha$, $X_\beta$, $X_\delta$
+    \STATE $t = t + 1$
+\ENDWHILE
+\STATE return $X_\alpha$
+\end{algorithmic}
+\end{algorithm}

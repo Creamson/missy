@@ -1,0 +1,23 @@
+\begin{algorithm}[H]
+\caption{Dodawanie rozwiązań do archiwum}
+\begin{algorithmic}
+\STATE NS = niezdominowane rozwiązania znalezione w danej iteracji
+\IF{archiwum jest puste}
+    \STATE Dodanie rozwiązań z NS do archiwum
+\ELSE
+    \FORALL{rozwiązanie $ns$ z NS}
+        \IF{rozwiązanie $ns$ jest zdominowane przez rozwiązanie w archiwum}
+            \STATE Odrzucenie rozwiązania $ns$
+        \ELSE
+            \STATE Dodanie rozwiązania $ns$ do archiwum
+            \IF{rozwiązanie $ns$ dominuje nad innymi rozwiązaniami}
+                \STATE Usunięcie rozwiązań zdominowanych z archiwum
+            \ENDIF
+        \ENDIF
+    \ENDFOR
+\ENDIF
+\IF{archiwum jest pełne}
+    \STATE Wykonanie mechanizmu adaptacji siatki
+\ENDIF
+\end{algorithmic}
+\end{algorithm}

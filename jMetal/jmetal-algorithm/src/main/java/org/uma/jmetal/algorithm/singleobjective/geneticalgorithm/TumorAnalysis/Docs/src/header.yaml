@@ -1,0 +1,25 @@
+---
+title: Model wzrostu guza jako problem odwrotny
+author: |
+  Leszek Siwik
+date: 2018-02-20
+abstract: |
+  Dokument stanowi (wstepny) raport z prac nad zdefiniowaniem
+  problemu wzrostu Tumora jako problemu odwrotnego wraz z próbą jego
+   rozwiazywania z wykorzystaniem ewolucji.
+geometry: margin=6em
+header-includes:
+  - \usepackage{mathrsfs}
+  - \usepackage{amssymb}
+  - \usepackage{empheq}
+  - \usepackage{braket}
+  - \usepackage{empheq}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{color}
+  - \usepackage{listings}
+  - \usepackage{mathtools}
+  - \setcounter{secnumdepth}{4}
+  - \setcounter{tocdepth}{4}
+---
+\newpage

@@ -1,0 +1,25 @@
+---
+title: Multiwinner voting w algorytmach genetycznych
+subtitle: |
+  Dokumentacja projektu
+author: |
+  Arkadiusz Gil
+date: 2018-03-16
+geometry: margin=6em
+header-includes:
+  - \usepackage{mathrsfs}
+  - \usepackage{amssymb}
+  - \usepackage{empheq}
+  - \usepackage{braket}
+  - \usepackage{empheq}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{color}
+  - \usepackage{listings}
+  - \usepackage{mathtools}
+  - \newtheorem{definition}{Definicja}
+nocite: |
+  @*
+---
+\newpage
+

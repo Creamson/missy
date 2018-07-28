@@ -1,0 +1,30 @@
+---
+title: GWC
+subtitle: |
+  ...
+author: |
+  Dominika Sarkowicz
+date: 2018-03-15
+abstract: |
+    ...
+geometry: margin=6em
+header-includes:
+  - \usepackage{mathrsfs}
+  - \usepackage{amssymb}
+  - \usepackage{empheq}
+  - \usepackage{braket}
+  - \usepackage{empheq}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \usepackage{color}
+  - \usepackage{listings}
+  - \usepackage{mathtools}
+  - \newtheorem{definition}{Definicja}
+  - \usepackage{algorithm}
+  - \usepackage{algorithm}\floatname{algorithm}{Algorytm}
+  - \usepackage{algorithmic}
+  - \usepackage{hyperref}
+  - \usepackage{subfig}
+  - \usepackage{caption}
+---
+\newpage

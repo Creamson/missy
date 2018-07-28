@@ -1,0 +1,1 @@
+pandoc --number-sections --table-of-contents --standalone -o ../build/docGWC.pdf headerGWC.yaml docGWC.md

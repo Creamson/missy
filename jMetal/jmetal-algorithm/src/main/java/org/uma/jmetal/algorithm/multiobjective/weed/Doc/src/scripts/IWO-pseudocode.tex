@@ -1,0 +1,21 @@
+\begin{algorithm}[H]
+\caption{Schemat algorytmu IWO}
+\begin{algorithmic}
+\State utworz pierwsza populacje osobnikow;
+\ForAll{osobniki z populacji}
+        \State oblicz wartosc funkcji przystosowania;
+\EndFor
+\While{kryterium stopu nie jest spelnione}
+	\ForAll{osobniki z populacji}
+        \State wyznacz liczbe ziaren;
+		\ForAll{ziarna}
+			\State oblicz odleglosc miedzy upadkiem ziarna a jego osobnikiem macierzystym;
+			\State na podstawie wartosci odleglosci skonstruuj nowego osobnika;
+			\State oblicz wartosc funkcji przystosowania osobnika
+		\EndFor
+	\EndFor
+	\State wybierz osobniki stanowiace nowa populacje;
+\EndWhile
+
+\end{algorithmic}
+\end{algorithm}
