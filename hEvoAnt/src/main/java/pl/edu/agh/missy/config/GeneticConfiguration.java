@@ -40,8 +40,8 @@ import java.util.function.Function;
 })
 public class GeneticConfiguration {
 
-    @Value("${genetic.crossoverProbability:0.9}")
-    private double crossoverProbability;
+    @Value("${genetic.crossoverProbabilityFactor:90.0}")
+    private double crossoverProbabilityFactor;
     @Value("${genetic.mutationProbabilityFactor:1.0}")
     private double mutationProbabilityFactor;
     @Value("${genetic.populationSize:100}")
@@ -72,7 +72,7 @@ public class GeneticConfiguration {
 
         problem = getProblemInstance();
 
-        crossover = new PMXCrossover(crossoverProbability);
+        crossover = new PMXCrossover(crossoverProbabilityFactor / problem.getNumberOfVariables());
 
         double mutationProbability = mutationProbabilityFactor / problem.getNumberOfVariables();
         mutation = new PermutationSwapMutation<>(mutationProbability);

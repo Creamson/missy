@@ -17,29 +17,40 @@ public class HybridRunner {
     private final Function<ExecutionStats, AbstractGeneticAlgorithm<PermutationSolution<Integer>, PermutationSolution<Integer>>> geneticAlgorithmFactory;
     private final int numberOfIterations;
     private final BSFResultSaver resultSaver;
+    private final boolean shouldRunAco;
+    private final boolean shouldRunEvo;
 
     public HybridRunner(
             Function<List<PermutationSolution<Integer>>, ACO> acoSystemFactory,
             Function<ExecutionStats, AbstractGeneticAlgorithm<PermutationSolution<Integer>, PermutationSolution<Integer>>> geneticAlgorithmFactory,
             int numberOfIterations,
-            BSFResultSaver resultSaver) {
+            BSFResultSaver resultSaver,
+            boolean shouldRunAco,
+            boolean shouldRunEvo
+    ) {
         this.acoSystemFactory = acoSystemFactory;
         this.geneticAlgorithmFactory = geneticAlgorithmFactory;
         this.numberOfIterations = numberOfIterations;
         this.resultSaver = resultSaver;
+        this.shouldRunAco = shouldRunAco;
+        this.shouldRunEvo = shouldRunEvo;
     }
 
     public void run() throws IOException {
         ExecutionStats stats = null;
-        List<PermutationSolution<Integer>> population;
+        List<PermutationSolution<Integer>> population = null;
 
         resultSaver.startTracking();
 
         for (int i = 0; i < numberOfIterations; i++) {
-            population = runGeneticSample(stats);
-            resultSaver.flushResults();
-            stats = runAntSample(population);
-            resultSaver.flushResults();
+            if (shouldRunEvo) {
+                population = runGeneticSample(stats);
+                resultSaver.flushResults();
+            }
+            if (shouldRunAco) {
+                stats = runAntSample(population);
+                resultSaver.flushResults();
+            }
         }
     }
 

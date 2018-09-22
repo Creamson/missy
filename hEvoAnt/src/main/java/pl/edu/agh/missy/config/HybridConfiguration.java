@@ -25,11 +25,22 @@ public class HybridConfiguration {
 
     @Value("${general.numberOfIterations:5}")
     private int numberOfIterations;
+    @Value("${general.shouldRunEvo:true}")
+    private boolean shouldRunEvo;
+    @Value("${general.shouldRunAco:true}")
+    private boolean shouldRunAco;
 
     @Bean
     public HybridRunner runner(Function<List<PermutationSolution<Integer>>, ACO> acoSystemFactory,
                                Function<ExecutionStats, AbstractGeneticAlgorithm<PermutationSolution<Integer>, PermutationSolution<Integer>>> geneticAlgorithmFactory,
                                BSFResultSaver resultSaver) {
-        return new HybridRunner(acoSystemFactory, geneticAlgorithmFactory, numberOfIterations, resultSaver);
+        return new HybridRunner(
+                acoSystemFactory,
+                geneticAlgorithmFactory,
+                numberOfIterations,
+                resultSaver,
+                shouldRunAco,
+                shouldRunEvo
+        );
     }
 }
