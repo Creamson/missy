@@ -11,18 +11,13 @@ import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
+import pl.edu.agh.missy.results.BSFResultSaver;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by ajnebro on 10/12/14.
- */
 public class AlgorithmBuilder {
 
-    /**
-     * Builder class
-     */
     private Problem<PermutationSolution<Integer>> problem;
     private int maxEvaluations;
     private int populationSize;
@@ -33,6 +28,7 @@ public class AlgorithmBuilder {
     private GenotypeProvider genotypeProvider;
 
     private SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> defaultSelectionOperator = new BinaryTournamentSelection<>();
+    private BSFResultSaver resultSaver;
 
     /**
      * Builder constructor
@@ -84,6 +80,7 @@ public class AlgorithmBuilder {
                         new CustomInitializationSteadyStateGeneticAlgorithm(
                                 provider,
                                 problem,
+                                resultSaver,
                                 maxEvaluations,
                                 populationSize,
                                 crossoverOperator,
@@ -93,6 +90,7 @@ public class AlgorithmBuilder {
                 .orElse(
                         new CustomInitializationSteadyStateGeneticAlgorithm(
                                 problem,
+                                resultSaver,
                                 maxEvaluations,
                                 populationSize,
                                 crossoverOperator,
@@ -107,6 +105,7 @@ public class AlgorithmBuilder {
                         new CustomInitializationGenerationalGeneticAlgorithm(
                                 provider,
                                 problem,
+                                resultSaver,
                                 maxEvaluations,
                                 populationSize,
                                 crossoverOperator,
@@ -117,6 +116,7 @@ public class AlgorithmBuilder {
                 .orElse(
                         new CustomInitializationGenerationalGeneticAlgorithm(
                                 problem,
+                                resultSaver,
                                 maxEvaluations,
                                 populationSize,
                                 crossoverOperator,
@@ -159,5 +159,9 @@ public class AlgorithmBuilder {
 
     public GenotypeProvider getGenotypeProvider() {
         return genotypeProvider;
+    }
+
+    public void setResultSaver(BSFResultSaver resultSaver) {
+        this.resultSaver = resultSaver;
     }
 }

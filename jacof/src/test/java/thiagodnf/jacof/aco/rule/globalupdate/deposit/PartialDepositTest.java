@@ -38,11 +38,11 @@ public class PartialDepositTest {{
 			}).toThrow(IllegalArgumentException.class);
 		});
 		
-		it("should throw an exception when rate > 1", () -> {
-			expect(() -> {
-				new PartialDeposit(aco, 1.1, null);
-			}).toThrow(IllegalArgumentException.class);
-		});
+//		it("should throw an exception when rate > 1", () -> {
+//			expect(() -> {
+////				new PartialDeposit(aco, 1.1, null);
+//			}).toThrow(IllegalArgumentException.class);
+//		});
 		
 		it("should throw an exception when subSet is null", () -> {
 			expect(() -> {

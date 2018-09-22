@@ -8,6 +8,7 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
+import pl.edu.agh.missy.results.BSFResultSaver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +16,23 @@ import java.util.Optional;
 
 public class CustomInitializationGenerationalGeneticAlgorithm extends GenerationalGeneticAlgorithm<PermutationSolution<Integer>> {
 
-    private GenotypeProvider initialGenotypeProvider;
+    private final BSFResultSaver resultSaver;
+    private final GenotypeProvider initialGenotypeProvider;
 
-    public CustomInitializationGenerationalGeneticAlgorithm(GenotypeProvider initialGenotypeProvider,
+    CustomInitializationGenerationalGeneticAlgorithm(Problem<PermutationSolution<Integer>> problem,
+                                                            BSFResultSaver resultSaver,
+                                                            int maxEvaluations,
+                                                            int populationSize,
+                                                            CrossoverOperator<PermutationSolution<Integer>> crossoverOperator,
+                                                            MutationOperator<PermutationSolution<Integer>> mutationOperator,
+                                                            SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selectionOperator,
+                                                            SolutionListEvaluator<PermutationSolution<Integer>> evaluator) {
+        this(null, problem, resultSaver, maxEvaluations, populationSize, crossoverOperator, mutationOperator, selectionOperator, evaluator);
+    }
+
+    CustomInitializationGenerationalGeneticAlgorithm(GenotypeProvider initialGenotypeProvider,
                                                             Problem<PermutationSolution<Integer>> problem,
+                                                            BSFResultSaver resultSaver,
                                                             int maxEvaluations,
                                                             int populationSize,
                                                             CrossoverOperator<PermutationSolution<Integer>> crossoverOperator,
@@ -27,16 +41,7 @@ public class CustomInitializationGenerationalGeneticAlgorithm extends Generation
                                                             SolutionListEvaluator<PermutationSolution<Integer>> evaluator) {
         super(problem, maxEvaluations, populationSize, crossoverOperator, mutationOperator, selectionOperator, evaluator);
         this.initialGenotypeProvider = initialGenotypeProvider;
-    }
-
-    public CustomInitializationGenerationalGeneticAlgorithm(Problem<PermutationSolution<Integer>> problem,
-                                                            int maxEvaluations,
-                                                            int populationSize,
-                                                            CrossoverOperator<PermutationSolution<Integer>> crossoverOperator,
-                                                            MutationOperator<PermutationSolution<Integer>> mutationOperator,
-                                                            SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selectionOperator,
-                                                            SolutionListEvaluator<PermutationSolution<Integer>> evaluator) {
-        super(problem, maxEvaluations, populationSize, crossoverOperator, mutationOperator, selectionOperator, evaluator);
+        this.resultSaver = resultSaver;
     }
 
     @Override
@@ -51,4 +56,9 @@ public class CustomInitializationGenerationalGeneticAlgorithm extends Generation
         }).orElseGet(() -> super.createInitialPopulation());
     }
 
+    @Override
+    protected List<PermutationSolution<Integer>> selection(List<PermutationSolution<Integer>> population){
+        resultSaver.recordCheckpoint(getResult().getObjective(0), "evo");
+        return super.selection(population);
+    }
 }

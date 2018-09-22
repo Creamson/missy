@@ -2,17 +2,14 @@ package pl.edu.agh.missy.convertion.aco2genetic;
 
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.solution.PermutationSolution;
-import pl.edu.agh.missy.genetic.JMetalIntegerPermuationSolution;
+import pl.edu.agh.missy.genetic.JMetalIntegerPermutationSolution;
 import thiagodnf.jacof.aco.ACO;
 import thiagodnf.jacof.aco.ant.Ant;
 import thiagodnf.jacof.util.ExecutionStats;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static java.util.stream.Collectors.toList;
 
 public class CoinFlipGenotypeProvider implements GenotypeProvider {
 
@@ -31,7 +28,7 @@ public class CoinFlipGenotypeProvider implements GenotypeProvider {
         Ant nextAnt = new CoinFlipAnt(aco, (lastId++) % aco.getNumberOfAnts());
         nextAnt.setAntInitialization(aco.getAntInitialization());
         nextAnt.run();
-        return new JMetalIntegerPermuationSolution(
+        return new JMetalIntegerPermutationSolution(
                 problem,
                 nextAnt.tour
         );

@@ -15,7 +15,7 @@ public abstract class AbstractGlobalUpdateRule extends AbstractRule{
 		
 		checkNotNull(aco, "The aco cannot be null");		
 		checkArgument(rate >= 0.0, "The rate should be greater or equal than 0");
-		checkArgument(rate <= 1.0, "The rate should be less or equal than 1");
+//		checkArgument(rate <= 1.0, "The rate should be less or equal than 1");
 		
 		this.rate = rate;
 	}

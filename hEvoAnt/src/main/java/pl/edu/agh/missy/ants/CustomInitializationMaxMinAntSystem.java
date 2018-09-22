@@ -8,21 +8,16 @@ import java.util.Optional;
 
 public class CustomInitializationMaxMinAntSystem extends MaxMinAntSystem {
 
-    private PheromonesInitializer pheromonesInitializer;
+    private Optional<PheromonesInitializer> pheromonesInitializer;
 
-    public CustomInitializationMaxMinAntSystem(PheromonesInitializer pheromonesInitializer, Problem problem) {
+    public CustomInitializationMaxMinAntSystem(Optional<PheromonesInitializer> pheromonesInitializer, Problem problem) {
         super(problem);
         this.pheromonesInitializer = pheromonesInitializer;
-    }
-
-    public CustomInitializationMaxMinAntSystem(Problem problem) {
-        super(problem);
     }
 
     @Override
     protected void initializePheromones() {
         super.initializePheromones();
-        Optional.ofNullable((pheromonesInitializer))
-                .ifPresent(initializer -> initializer.initializePheromones(this));
+        pheromonesInitializer.ifPresent(initializer -> initializer.initializePheromones(this));
     }
 }

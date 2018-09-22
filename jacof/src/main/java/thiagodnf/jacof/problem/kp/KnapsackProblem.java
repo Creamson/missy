@@ -16,7 +16,7 @@ import thiagodnf.jacof.util.io.InstanceReader;
  * 
  * @author Thiago N. Ferreira
  * @version 1.0.0
- * @see https://people.sc.fsu.edu/~jburkardt/datasets/knapsack_01/knapsack_01.html
+ * //@see https://people.sc.fsu.edu/~jburkardt/datasets/knapsack_01/knapsack_01.html
  */
 public class KnapsackProblem extends Problem {
 

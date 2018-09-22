@@ -5,9 +5,9 @@ import org.uma.jmetal.solution.impl.DefaultIntegerPermutationSolution;
 
 import java.util.List;
 
-public class JMetalIntegerPermuationSolution extends DefaultIntegerPermutationSolution {
+public class JMetalIntegerPermutationSolution extends DefaultIntegerPermutationSolution {
 
-    public JMetalIntegerPermuationSolution(PermutationProblem<?> problem, List<Integer> initialSequence) {
+    public JMetalIntegerPermutationSolution(PermutationProblem<?> problem, List<Integer> initialSequence) {
         super(problem);
 
         for (int i = 0; i < getNumberOfVariables(); i++) {

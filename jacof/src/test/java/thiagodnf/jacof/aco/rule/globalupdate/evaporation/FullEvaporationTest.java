@@ -36,11 +36,11 @@ public class FullEvaporationTest {{
 			}).toThrow(IllegalArgumentException.class);
 		});
 		
-		it("should throw an exception when rate > 1", () -> {
-			expect(() -> {
-				new FullEvaporation(aco, 1.1);
-			}).toThrow(IllegalArgumentException.class);
-		});
+//		it("should throw an exception when rate > 1", () -> {
+//			expect(() -> {
+////				new FullEvaporation(aco, 1.1);
+//			}).toThrow(IllegalArgumentException.class);
+//		});
 	});
 	
 	describe("When get the new value", () -> {

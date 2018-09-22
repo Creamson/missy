@@ -8,21 +8,16 @@ import java.util.Optional;
 
 public class CustomInitializationAntSystem extends AntSystem {
 
-    private PheromonesInitializer pheromonesInitializer;
+    private Optional<PheromonesInitializer> pheromonesInitializer;
 
-    public CustomInitializationAntSystem(PheromonesInitializer pheromonesInitializer, Problem problem) {
+    public CustomInitializationAntSystem(Optional<PheromonesInitializer> pheromonesInitializer, Problem problem) {
         super(problem);
         this.pheromonesInitializer = pheromonesInitializer;
-    }
-
-    public CustomInitializationAntSystem(Problem problem) {
-        super(problem);
     }
 
     @Override
     protected void initializePheromones() {
         super.initializePheromones();
-        Optional.ofNullable((pheromonesInitializer))
-                .ifPresent(initializer -> initializer.initializePheromones(this));
+        pheromonesInitializer.ifPresent(initializer -> initializer.initializePheromones(this));
     }
 }

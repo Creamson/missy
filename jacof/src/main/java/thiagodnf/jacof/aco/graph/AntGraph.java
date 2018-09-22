@@ -86,7 +86,7 @@ public class AntGraph {
 	/**
 	 * Initialize all arc by using a specific graph initialization 
 	 * 
-	 * @param trailInitialization The method used to initialize the arc(i,j)
+	 * @param graphInitialization The method used to initialize the arc(i,j)
 	 */
 	public void initialize(AbstractGraphInitialization graphInitialization) {
 

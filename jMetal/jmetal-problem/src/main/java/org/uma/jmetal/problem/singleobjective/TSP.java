@@ -5,11 +5,8 @@ import org.uma.jmetal.problem.impl.AbstractIntegerPermutationProblem;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.JMetalException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
+import java.io.*;
+import java.lang.reflect.Field;
 
 /**
  * Class representing a single-objective TSP (Traveling Salesman Problem) problem.
@@ -61,7 +58,8 @@ public class TSP extends AbstractIntegerPermutationProblem {
   private double [][] readProblem(String file) throws IOException {
     double [][] matrix = null;
 
-    InputStream in = getClass().getResourceAsStream(file);
+//    InputStream in = getClass().getResourceAsStream(file);
+    InputStream in = new FileInputStream(file);
     InputStreamReader isr = new InputStreamReader(in);
     BufferedReader br = new BufferedReader(isr);
 

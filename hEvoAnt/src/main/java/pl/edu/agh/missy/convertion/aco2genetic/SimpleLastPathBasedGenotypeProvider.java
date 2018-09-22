@@ -2,7 +2,7 @@ package pl.edu.agh.missy.convertion.aco2genetic;
 
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.solution.PermutationSolution;
-import pl.edu.agh.missy.genetic.JMetalIntegerPermuationSolution;
+import pl.edu.agh.missy.genetic.JMetalIntegerPermutationSolution;
 import thiagodnf.jacof.aco.ant.Ant;
 import thiagodnf.jacof.util.ExecutionStats;
 
@@ -18,7 +18,6 @@ public class SimpleLastPathBasedGenotypeProvider implements GenotypeProvider {
     private int nextIndex = 0;
     private PermutationProblem<PermutationSolution<Integer>> problem;
 
-
     public SimpleLastPathBasedGenotypeProvider(PermutationProblem<PermutationSolution<Integer>> problem, ExecutionStats acoExecutionStats) {
         antPaths = Stream.of(acoExecutionStats.aco.getAnts())
                 .map(Ant::getSolution)
@@ -29,7 +28,7 @@ public class SimpleLastPathBasedGenotypeProvider implements GenotypeProvider {
 
     @Override
     public PermutationSolution<Integer> nextGenotype() {
-        PermutationSolution<Integer> genotype = new JMetalIntegerPermuationSolution(problem, antPaths.get(nextIndex));
+        PermutationSolution<Integer> genotype = new JMetalIntegerPermutationSolution(problem, antPaths.get(nextIndex));
         nextIndex = (nextIndex + 1) % antPaths.size();
         return genotype;
     }

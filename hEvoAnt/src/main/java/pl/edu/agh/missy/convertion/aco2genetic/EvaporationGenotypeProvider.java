@@ -1,18 +1,14 @@
 package pl.edu.agh.missy.convertion.aco2genetic;
 
-import com.google.common.base.Preconditions;
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.solution.PermutationSolution;
-import pl.edu.agh.missy.genetic.JMetalIntegerPermuationSolution;
+import pl.edu.agh.missy.genetic.JMetalIntegerPermutationSolution;
 import thiagodnf.jacof.aco.ACO;
 import thiagodnf.jacof.aco.ant.Ant;
 import thiagodnf.jacof.aco.rule.globalupdate.evaporation.FullEvaporation;
 import thiagodnf.jacof.util.ExecutionStats;
 
-import java.util.Arrays;
-
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.util.stream.Collectors.toList;
 
 public class EvaporationGenotypeProvider implements GenotypeProvider {
 
@@ -44,7 +40,7 @@ public class EvaporationGenotypeProvider implements GenotypeProvider {
             aco.getGraph().setTau(v1, v2, newValue);
             aco.getGraph().setTau(v2, v1, newValue);
         }
-        return new JMetalIntegerPermuationSolution(
+        return new JMetalIntegerPermutationSolution(
                 problem,
                 nextAnt.tour
         );
