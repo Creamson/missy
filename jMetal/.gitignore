@@ -137,8 +137,6 @@ jmetal.iml
 jmetal-core/jmetal-core.iml
 jmetal-algorithm/*.iml
 jmetal-problem/*.iml
-FUN*
-VAR*
 coverage
 *.iml
 *Backup
