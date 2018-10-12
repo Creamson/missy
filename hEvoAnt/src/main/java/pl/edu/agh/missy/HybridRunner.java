@@ -1,8 +1,8 @@
 package pl.edu.agh.missy;
 
-import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
+import pl.edu.agh.missy.evo.JMetalEvolutionaryAlgorithm;
 import pl.edu.agh.missy.results.BSFResultSaver;
 import thiagodnf.jacof.aco.ACO;
 import thiagodnf.jacof.util.ExecutionStats;
@@ -14,7 +14,7 @@ import java.util.function.Function;
 public class HybridRunner {
 
     private final Function<List<PermutationSolution<Integer>>, ACO> acoSystemFactory;
-    private final Function<ExecutionStats, AbstractGeneticAlgorithm<PermutationSolution<Integer>, PermutationSolution<Integer>>> geneticAlgorithmFactory;
+    private final Function<ExecutionStats, JMetalEvolutionaryAlgorithm> geneticAlgorithmFactory;
     private final int numberOfIterations;
     private final BSFResultSaver resultSaver;
     private final boolean shouldRunAco;
@@ -22,7 +22,7 @@ public class HybridRunner {
 
     public HybridRunner(
             Function<List<PermutationSolution<Integer>>, ACO> acoSystemFactory,
-            Function<ExecutionStats, AbstractGeneticAlgorithm<PermutationSolution<Integer>, PermutationSolution<Integer>>> geneticAlgorithmFactory,
+            Function<ExecutionStats, JMetalEvolutionaryAlgorithm> geneticAlgorithmFactory,
             int numberOfIterations,
             BSFResultSaver resultSaver,
             boolean shouldRunAco,
@@ -61,7 +61,7 @@ public class HybridRunner {
     }
 
     private List<PermutationSolution<Integer>> runGeneticSample(ExecutionStats executionStats) {
-        AbstractGeneticAlgorithm<PermutationSolution<Integer>, PermutationSolution<Integer>> algorithm = geneticAlgorithmFactory.apply(executionStats);
+        JMetalEvolutionaryAlgorithm algorithm = geneticAlgorithmFactory.apply(executionStats);
 
         new AlgorithmRunner.Executor(algorithm)
                 .execute();

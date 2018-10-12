@@ -1,4 +1,4 @@
-package pl.edu.agh.missy.genetic;
+package pl.edu.agh.missy.evo;
 
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.solution.impl.DefaultIntegerPermutationSolution;

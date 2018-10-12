@@ -2,7 +2,7 @@ package pl.edu.agh.missy.convertion.aco2genetic;
 
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.solution.PermutationSolution;
-import pl.edu.agh.missy.genetic.JMetalIntegerPermutationSolution;
+import pl.edu.agh.missy.evo.JMetalIntegerPermutationSolution;
 import thiagodnf.jacof.aco.ant.Ant;
 import thiagodnf.jacof.util.ExecutionStats;
 

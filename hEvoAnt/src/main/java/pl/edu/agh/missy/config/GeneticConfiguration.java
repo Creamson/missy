@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
+import org.uma.jmetal.algorithm.multiobjective.lemas.Algorithms.JMetal5ProgressiveEMAS;
+import org.uma.jmetal.algorithm.multiobjective.lemas.Comparators.AreaUnderControlComparator;
+import org.uma.jmetal.algorithm.multiobjective.lemas.Comparators.AreaUnderControlDistanceToClosesNeighbourComparator;
+import org.uma.jmetal.algorithm.multiobjective.lemas.Utils.Constants;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
@@ -15,13 +17,15 @@ import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.problem.singleobjective.TSP;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import pl.edu.agh.missy.convertion.aco2genetic.CoinFlipGenotypeProvider;
 import pl.edu.agh.missy.convertion.aco2genetic.EvaporationGenotypeProvider;
 import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
 import pl.edu.agh.missy.convertion.aco2genetic.SimpleLastPathBasedGenotypeProvider;
-import pl.edu.agh.missy.genetic.AlgorithmBuilder;
+import pl.edu.agh.missy.evo.genetic.AlgorithmBuilder;
+import pl.edu.agh.missy.evo.JMetalEvolutionaryAlgorithm;
 import pl.edu.agh.missy.results.BSFResultSaver;
 import thiagodnf.jacof.util.ExecutionStats;
 
@@ -63,7 +67,7 @@ public class GeneticConfiguration {
             "evaporation", (p, e) -> new EvaporationGenotypeProvider(p, e, evaporationRate)
     );
 
-    private AbstractGeneticAlgorithm<PermutationSolution<Integer>, PermutationSolution<Integer>> getGeneticAlgorithm(BSFResultSaver bsfResultSaver, ExecutionStats executionStats) {
+    private JMetalEvolutionaryAlgorithm getGeneticAlgorithm(BSFResultSaver bsfResultSaver, ExecutionStats executionStats) {
         PermutationProblem<PermutationSolution<Integer>> problem;
 
         CrossoverOperator<PermutationSolution<Integer>> crossover;
@@ -91,6 +95,24 @@ public class GeneticConfiguration {
         );
         algorithmBuilder.setResultSaver(bsfResultSaver);
 
+        MutationOperator<DoubleSolution> strongMutationOperator = Constants.STRONG_MOP;
+        int maxIterations = Constants.MAX_ITERATIONS;
+        int numberOfIslands = Constants.NUMBER_OF_ISLANDS;
+        int envEnergy = Constants.ENV_ENERGY;
+        double initialResourceValue = Constants.INITIAL_RESOURCE_VALUE;
+        double transferResourceValue = Constants.TRANSFER_RESOURCE_VALUE;
+        AreaUnderControlDistanceToClosesNeighbourComparator comparator = new AreaUnderControlDistanceToClosesNeighbourComparator();
+        AreaUnderControlComparator parentToChildComparator = new AreaUnderControlComparator();
+        JMetal5ProgressiveEMAS<PermutationSolution<Integer>> emas = new JMetal5ProgressiveEMAS<>(problem, crossover, mutation, strongMutationOperator,
+                maxIterations, numberOfIslands, envEnergy, initialResourceValue,
+                transferResourceValue,
+                "ProgressiveEliteAreaUnderControlWithDistanceArea",
+                2,
+                comparator,
+                parentToChildComparator);
+
+
+
         if(algorithmType.toLowerCase().equals("generational")) {
             return algorithmBuilder
                     .buildAsGenerational();
@@ -113,7 +135,7 @@ public class GeneticConfiguration {
     }
 
     @Bean
-    public Function<ExecutionStats, AbstractGeneticAlgorithm<PermutationSolution<Integer>, PermutationSolution<Integer>>> getGeneticAlgorithmFactory(BSFResultSaver bsfResultSaver) {
+    public Function<ExecutionStats, JMetalEvolutionaryAlgorithm> getEvolutionaryAlgorithmFactory(BSFResultSaver bsfResultSaver) {
         return executionStats -> getGeneticAlgorithm(bsfResultSaver, executionStats);
     }
 }

@@ -34,9 +34,9 @@ public class JMetal5BaseEMAS<S extends Solution<?>> extends AbstractEMASAlgorith
 
     private final int numberOfIslands;
 
-    private final int envEnergy;
+    protected final int envEnergy;
 
-    private final double initialAgentResourceLevel;
+    protected final double initialAgentResourceLevel;
 
     private final double transferAgentResourceLevel;
 
@@ -50,15 +50,15 @@ public class JMetal5BaseEMAS<S extends Solution<?>> extends AbstractEMASAlgorith
 
     private final MutationOperator<S> strongMutationOperator;
 
-    private final JMetal5AgentBuilder<S> builder = new JMetal5AgentBuilder<>();
+    protected final JMetal5AgentBuilder<S> builder = new JMetal5AgentBuilder<>();
 
     private SimpleMeasureManager measureManager = new SimpleMeasureManager();
 
     private BasicMeasure<Object> solutionListMeasure;
 
-    private EmasDominanceComparator comparator;
+    protected EmasDominanceComparator comparator;
 
-    private EmasDominanceComparator parentChildComparator;
+    protected EmasDominanceComparator parentChildComparator;
 
     private int imBetterMeetingTypeCounter;
 
