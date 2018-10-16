@@ -152,7 +152,7 @@ public class JMetal5Agent<S extends Solution<?>> {
     public void updateKnownNonDominatedObjectives(JMetal5Agent<S> agent2) {
         List<Double> objectiveListToAddToAgent1 = new ArrayList<>();
         List<Double> objectiveListToAddToAgent2 = new ArrayList<>();
-        for (int i = 0; i < Constants.PROBLEM.getProblem().getNumberOfObjectives(); i++) {
+        for (int i = 0; i < EMAS.getProblem().getNumberOfObjectives(); i++) {
             objectiveListToAddToAgent1.add(agent2.genotype.getObjective(i));
             objectiveListToAddToAgent2.add(this.genotype.getObjective(i));
         }
@@ -171,31 +171,31 @@ public class JMetal5Agent<S extends Solution<?>> {
 
     private void updateAnchorList(JMetal5Agent partner) {
         if (this.lowestKnownObjectiveValues.isEmpty()) {
-            for (int i = 0; i < Constants.PROBLEM.getProblem().getNumberOfObjectives(); i++) {
+            for (int i = 0; i < EMAS.getProblem().getNumberOfObjectives(); i++) {
                 this.lowestKnownObjectiveValues.add(this.genotype.getObjective(i));
             }
         }
 
         if (partner.lowestKnownObjectiveValues.isEmpty()) {
-            for (int i = 0; i < Constants.PROBLEM.getProblem().getNumberOfObjectives(); i++) {
+            for (int i = 0; i < EMAS.getProblem().getNumberOfObjectives(); i++) {
                 partner.lowestKnownObjectiveValues.add(partner.genotype.getObjective(i));
             }
         }
 
         if (this.highestKnownObjectiveValues.isEmpty()) {
-            for (int i = 0; i < Constants.PROBLEM.getProblem().getNumberOfObjectives(); i++) {
+            for (int i = 0; i < EMAS.getProblem().getNumberOfObjectives(); i++) {
                 this.highestKnownObjectiveValues.add(this.genotype.getObjective(i));
             }
         }
 
         if (partner.highestKnownObjectiveValues.isEmpty()) {
-            for (int i = 0; i < Constants.PROBLEM.getProblem().getNumberOfObjectives(); i++) {
+            for (int i = 0; i < EMAS.getProblem().getNumberOfObjectives(); i++) {
                 partner.highestKnownObjectiveValues.add(partner.genotype.getObjective(i));
             }
         }
 
 
-        for (int i = 0; i < Constants.PROBLEM.getProblem().getNumberOfObjectives(); i++) {
+        for (int i = 0; i < EMAS.getProblem().getNumberOfObjectives(); i++) {
             this.lowestKnownObjectiveValues.set(i, Math.min(this.lowestKnownObjectiveValues.get(i), (Double) partner.lowestKnownObjectiveValues.get(i)));
             this.highestKnownObjectiveValues.set(i, Math.min(this.highestKnownObjectiveValues.get(i), (Double) partner.highestKnownObjectiveValues.get(i)));
         }
@@ -293,8 +293,8 @@ public class JMetal5Agent<S extends Solution<?>> {
     }
 
 
-    public List<JMetal5Agent<S>> reproAct(MutationOperator mutationOperator, int numberOfChildren,
-                                          Problem problem, List<? extends JMetal5Agent<S>> parentList,
+    public List<JMetal5Agent<S>> reproAct(MutationOperator<S> mutationOperator, int numberOfChildren,
+                                          Problem<S> problem, List<? extends JMetal5Agent<S>> parentList,
                                           List<? extends JMetal5Agent<S>> offspringList) {
         List<JMetal5Agent<S>> offspringToBeReturned = new ArrayList<>();
         for (int index = 0; index < numberOfChildren; index++) {

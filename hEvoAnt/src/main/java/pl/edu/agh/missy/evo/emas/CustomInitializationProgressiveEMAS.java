@@ -7,6 +7,7 @@ import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.PermutationSolution;
 import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
+import pl.edu.agh.missy.evo.JMetalEvolutionaryAlgorithm;
 import pl.edu.agh.missy.results.BSFResultSaver;
 
 import java.util.ArrayList;
@@ -15,16 +16,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CustomInitializationProgressiveEMAS extends JMetal5ProgressiveEMAS<PermutationSolution<Integer>> {
+public class CustomInitializationProgressiveEMAS extends JMetal5ProgressiveEMAS<PermutationSolution<Integer>>  {
 
     private final BSFResultSaver resultSaver;
     private final GenotypeProvider initialGenotypeProvider;
 
-    public CustomInitializationProgressiveEMAS(Problem problem,
+    public CustomInitializationProgressiveEMAS(Problem<PermutationSolution<Integer>> problem,
                                                BSFResultSaver resultSaver,
-                                               CrossoverOperator crossoverOperator,
-                                               MutationOperator mutationOperator,
-                                               MutationOperator strongMutationOperator,
+                                               CrossoverOperator<PermutationSolution<Integer>> crossoverOperator,
+                                               MutationOperator<PermutationSolution<Integer>> mutationOperator,
+                                               MutationOperator<PermutationSolution<Integer>> strongMutationOperator,
                                                int maxNumberOfIterations,
                                                int numberOfIslands,
                                                int envEnergy,
@@ -53,11 +54,11 @@ public class CustomInitializationProgressiveEMAS extends JMetal5ProgressiveEMAS<
 
 
     public CustomInitializationProgressiveEMAS(GenotypeProvider initialGenotypeProvider,
-                                               Problem problem,
+                                               Problem<PermutationSolution<Integer>> problem,
                                                BSFResultSaver resultSaver,
-                                               CrossoverOperator crossoverOperator,
-                                               MutationOperator mutationOperator,
-                                               MutationOperator strongMutationOperator,
+                                               CrossoverOperator<PermutationSolution<Integer>> crossoverOperator,
+                                               MutationOperator<PermutationSolution<Integer>> mutationOperator,
+                                               MutationOperator<PermutationSolution<Integer>> strongMutationOperator,
                                                int maxNumberOfIterations,
                                                int numberOfIslands,
                                                int envEnergy,
@@ -86,30 +87,32 @@ public class CustomInitializationProgressiveEMAS extends JMetal5ProgressiveEMAS<
 
     @Override
     protected void createInitialPopulation() {
-
-        int numberOfAgents = (int) (envEnergy / initialAgentResourceLevel);
+        if(initialGenotypeProvider != null) {
+            int numberOfAgents = (int) (envEnergy / initialAgentResourceLevel);
 
 //        population = Stream.generate(() -> getProblem().createSolution())
-        population = Stream.generate(initialGenotypeProvider::nextGenotype)
-                .limit(numberOfAgents)
-                .map(genotype -> builder.withGenotype(genotype)
-                        .withEMAS(this)
-                        .withAgentType(getAgentType())
-                        .withInitialResourcesValue(getInitialAgentResourceLevel())
-                        .withCurrentIsland(0)
-                        .withDominanceComparator(this.comparator)
-                        .withParentToChildComparator(this.parentChildComparator)
-                        .build())
+            population = Stream.generate(initialGenotypeProvider::nextGenotype)
+                    .limit(numberOfAgents)
+                    .map(genotype -> builder.withGenotype(genotype)
+                            .withEMAS(this)
+                            .withAgentType(getAgentType())
+                            .withInitialResourcesValue(getInitialAgentResourceLevel())
+                            .withCurrentIsland(0)
+                            .withDominanceComparator(this.comparator)
+                            .withParentToChildComparator(this.parentChildComparator)
+                            .build())
 //                .map(genotype -> new JMetal5Agent<>(genotype,
 //                        crossoverOperator,initialAgentResourceLevel,1,comparator,this))
-                .collect(Collectors.toList());
-        population.forEach(agent -> agent.evaluate(getProblem()));
-        
+                    .collect(Collectors.toList());
+            population.forEach(agent -> agent.evaluate(getProblem()));
+        } else {
+            super.createInitialPopulation();
+        }
     }
 
     @Override
-    protected List<PermutationSolution<Integer>> selection(List<PermutationSolution<Integer>> population){
-        resultSaver.recordCheckpoint(getResult().getObjective(0), "evo");
-        return super.selection(population);
+    protected boolean isStoppingConditionReached() {
+        resultSaver.recordCheckpoint(getResult().get(0).getObjective(0), "evo");
+        return super.isStoppingConditionReached();
     }
 }

@@ -13,17 +13,22 @@ import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.crossover.PMXCrossover;
+import org.uma.jmetal.operator.impl.mutation.IntegerPolynomialMutation;
 import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
+import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.problem.singleobjective.TSP;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import pl.edu.agh.missy.convertion.aco2genetic.CoinFlipGenotypeProvider;
 import pl.edu.agh.missy.convertion.aco2genetic.EvaporationGenotypeProvider;
 import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
 import pl.edu.agh.missy.convertion.aco2genetic.SimpleLastPathBasedGenotypeProvider;
+import pl.edu.agh.missy.evo.emas.CustomInitializationProgressiveEMAS;
+import pl.edu.agh.missy.evo.emas.EMASWrapper;
 import pl.edu.agh.missy.evo.genetic.AlgorithmBuilder;
 import pl.edu.agh.missy.evo.JMetalEvolutionaryAlgorithm;
 import pl.edu.agh.missy.results.BSFResultSaver;
@@ -42,7 +47,7 @@ import java.util.function.Function;
 @Import({
         ResultSavingConfiguration.class
 })
-public class GeneticConfiguration {
+public class EvolutionaryConfiguration {
 
     @Value("${genetic.crossoverProbabilityFactor:90.0}")
     private double crossoverProbabilityFactor;
@@ -93,35 +98,48 @@ public class GeneticConfiguration {
                         genotypeProviderFactorySupplier.get(genotypeProviderVersion).apply(problem, stats)
                 )
         );
-        algorithmBuilder.setResultSaver(bsfResultSaver);
 
-        MutationOperator<DoubleSolution> strongMutationOperator = Constants.STRONG_MOP;
+        if (algorithmType.equalsIgnoreCase("generational")) {
+            return algorithmBuilder
+                    .buildAsGenerational();
+        } else if (algorithmType.equalsIgnoreCase("steadystate")) {
+            return algorithmBuilder
+                    .buildAsSteadyState();
+        } else if (algorithmType.equalsIgnoreCase("progressiveEmas")) {
+            return getEmasInstance(bsfResultSaver, executionStats, problem, crossover, mutation);
+        } else {
+            throw new IllegalStateException("No known algorithm type specified");
+        }
+    }
+
+    private JMetalEvolutionaryAlgorithm getEmasInstance(BSFResultSaver bsfResultSaver, ExecutionStats executionStats, PermutationProblem<PermutationSolution<Integer>> problem, CrossoverOperator<PermutationSolution<Integer>> crossover, MutationOperator<PermutationSolution<Integer>> mutation) {
+        MutationOperator<PermutationSolution<Integer>> strongMutationOperator = new PermutationSwapMutation<>(1.0);
         int maxIterations = Constants.MAX_ITERATIONS;
+//        int maxIterations = 1000;
         int numberOfIslands = Constants.NUMBER_OF_ISLANDS;
         int envEnergy = Constants.ENV_ENERGY;
         double initialResourceValue = Constants.INITIAL_RESOURCE_VALUE;
         double transferResourceValue = Constants.TRANSFER_RESOURCE_VALUE;
         AreaUnderControlDistanceToClosesNeighbourComparator comparator = new AreaUnderControlDistanceToClosesNeighbourComparator();
         AreaUnderControlComparator parentToChildComparator = new AreaUnderControlComparator();
-        JMetal5ProgressiveEMAS<PermutationSolution<Integer>> emas = new JMetal5ProgressiveEMAS<>(problem, crossover, mutation, strongMutationOperator,
-                maxIterations, numberOfIslands, envEnergy, initialResourceValue,
-                transferResourceValue,
-                "ProgressiveEliteAreaUnderControlWithDistanceArea",
-                2,
-                comparator,
-                parentToChildComparator);
 
-
-
-        if(algorithmType.toLowerCase().equals("generational")) {
-            return algorithmBuilder
-                    .buildAsGenerational();
-        } else if(algorithmType.toLowerCase().equals("steadystate")) {
-            return algorithmBuilder
-                    .buildAsSteadyState();
-        } else {
-            throw new IllegalStateException("No known algorithm type specified");
-        }
+        return new EMASWrapper(Optional.ofNullable(executionStats)
+                .map(stats -> {
+                    GenotypeProvider genotypeProvider = genotypeProviderFactorySupplier.get(genotypeProviderVersion).apply(problem, stats);
+                    return new CustomInitializationProgressiveEMAS(genotypeProvider, problem, bsfResultSaver, crossover, mutation, strongMutationOperator,
+                            maxIterations, numberOfIslands, envEnergy, initialResourceValue,
+                            transferResourceValue,
+                            "ProgressiveEliteAreaUnderControlWithDistanceArea",
+                            2,
+                            comparator,
+                            parentToChildComparator);
+                }).orElseGet(() -> new CustomInitializationProgressiveEMAS(problem, bsfResultSaver, crossover, mutation, strongMutationOperator,
+                        maxIterations, numberOfIslands, envEnergy, initialResourceValue,
+                        transferResourceValue,
+                        "ProgressiveEliteAreaUnderControlWithDistanceArea",
+                        2,
+                        comparator,
+                        parentToChildComparator)));
     }
 
     private PermutationProblem<PermutationSolution<Integer>> getProblemInstance() {

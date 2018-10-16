@@ -18,7 +18,7 @@ import java.util.function.Function;
 //@PropertySource("classpath:application.properties")
 @Import({
         AcoConfiguration.class,
-        GeneticConfiguration.class
+        EvolutionaryConfiguration.class
 })
 public class HybridConfiguration {
 
