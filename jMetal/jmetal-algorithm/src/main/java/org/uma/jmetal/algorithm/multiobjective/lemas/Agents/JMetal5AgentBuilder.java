@@ -79,7 +79,7 @@ public final class JMetal5AgentBuilder<S extends Solution<?>> {
                 agent = new JMetal5GlobalRankAgent();
                 break;
             case "JMetal5ProgressiveAgent":
-                agent = new JMetal5ProgressiveAgent();
+                agent = new JMetal5ProgressiveAgent<>();
                 break;
         }
         agent.setGenotype(genotype);

@@ -29,7 +29,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Configuration
-//@PropertySource("classpath:application.properties")
 @Import({
         ResultSavingConfiguration.class
 })

@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.function.Function;
 
 @Configuration
-//@PropertySource("classpath:application.properties")
 @Import({
         AcoConfiguration.class,
         EvolutionaryConfiguration.class

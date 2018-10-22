@@ -1,27 +1,23 @@
 package pl.edu.agh.missy.evo.emas;
 
-import org.uma.jmetal.algorithm.multiobjective.lemas.Algorithms.JMetal5ProgressiveEMAS;
+import org.uma.jmetal.algorithm.multiobjective.lemas.Algorithms.JMetal5GlobalRankEMAS;
 import org.uma.jmetal.algorithm.multiobjective.lemas.Comparators.EmasDominanceComparator;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.PermutationSolution;
 import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
-import pl.edu.agh.missy.evo.JMetalEvolutionaryAlgorithm;
 import pl.edu.agh.missy.results.BSFResultSaver;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CustomInitializationProgressiveEMAS extends JMetal5ProgressiveEMAS<PermutationSolution<Integer>>  {
+public class CustomInitializationGlobalRankEMAS extends JMetal5GlobalRankEMAS<PermutationSolution<Integer>> {
 
     private final BSFResultSaver resultSaver;
     private final GenotypeProvider initialGenotypeProvider;
 
-    public CustomInitializationProgressiveEMAS(Problem<PermutationSolution<Integer>> problem,
+    public CustomInitializationGlobalRankEMAS(Problem<PermutationSolution<Integer>> problem,
                                                BSFResultSaver resultSaver,
                                                CrossoverOperator<PermutationSolution<Integer>> crossoverOperator,
                                                MutationOperator<PermutationSolution<Integer>> mutationOperator,
@@ -53,7 +49,7 @@ public class CustomInitializationProgressiveEMAS extends JMetal5ProgressiveEMAS<
     }
 
 
-    public CustomInitializationProgressiveEMAS(GenotypeProvider initialGenotypeProvider,
+    public CustomInitializationGlobalRankEMAS(GenotypeProvider initialGenotypeProvider,
                                                Problem<PermutationSolution<Integer>> problem,
                                                BSFResultSaver resultSaver,
                                                CrossoverOperator<PermutationSolution<Integer>> crossoverOperator,
@@ -84,6 +80,7 @@ public class CustomInitializationProgressiveEMAS extends JMetal5ProgressiveEMAS<
         this.resultSaver = resultSaver;
         this.initialGenotypeProvider = initialGenotypeProvider;
     }
+
 
     @Override
     protected void createInitialPopulation() {

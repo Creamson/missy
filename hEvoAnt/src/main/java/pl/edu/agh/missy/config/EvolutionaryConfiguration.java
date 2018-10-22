@@ -29,6 +29,7 @@ import pl.edu.agh.missy.convertion.aco2genetic.GenotypeProvider;
 import pl.edu.agh.missy.convertion.aco2genetic.SimpleLastPathBasedGenotypeProvider;
 import pl.edu.agh.missy.evo.emas.CustomInitializationProgressiveEMAS;
 import pl.edu.agh.missy.evo.emas.EMASWrapper;
+import pl.edu.agh.missy.evo.emas.EmasBuilder;
 import pl.edu.agh.missy.evo.genetic.AlgorithmBuilder;
 import pl.edu.agh.missy.evo.JMetalEvolutionaryAlgorithm;
 import pl.edu.agh.missy.results.BSFResultSaver;
@@ -43,7 +44,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Configuration
-//@PropertySource("classpath:application.properties")
 @Import({
         ResultSavingConfiguration.class
 })
@@ -105,14 +105,17 @@ public class EvolutionaryConfiguration {
         } else if (algorithmType.equalsIgnoreCase("steadystate")) {
             return algorithmBuilder
                     .buildAsSteadyState();
-        } else if (algorithmType.equalsIgnoreCase("progressiveEmas")) {
-            return getEmasInstance(bsfResultSaver, executionStats, problem, crossover, mutation);
+        } else if (algorithmType.equalsIgnoreCase("baseEmas")
+                || algorithmType.equalsIgnoreCase("globalRankEmas")
+                || algorithmType.equalsIgnoreCase("progressiveEmas")
+                ) {
+            return getEmasInstance(algorithmType, bsfResultSaver, executionStats, problem, crossover, mutation);
         } else {
             throw new IllegalStateException("No known algorithm type specified");
         }
     }
 
-    private JMetalEvolutionaryAlgorithm getEmasInstance(BSFResultSaver bsfResultSaver, ExecutionStats executionStats, PermutationProblem<PermutationSolution<Integer>> problem, CrossoverOperator<PermutationSolution<Integer>> crossover, MutationOperator<PermutationSolution<Integer>> mutation) {
+    private JMetalEvolutionaryAlgorithm getEmasInstance(String emasType, BSFResultSaver bsfResultSaver, ExecutionStats executionStats, PermutationProblem<PermutationSolution<Integer>> problem, CrossoverOperator<PermutationSolution<Integer>> crossover, MutationOperator<PermutationSolution<Integer>> mutation) {
         MutationOperator<PermutationSolution<Integer>> strongMutationOperator = new PermutationSwapMutation<>(1.0);
         int maxIterations = Constants.MAX_ITERATIONS;
 //        int maxIterations = 1000;
@@ -123,23 +126,39 @@ public class EvolutionaryConfiguration {
         AreaUnderControlDistanceToClosesNeighbourComparator comparator = new AreaUnderControlDistanceToClosesNeighbourComparator();
         AreaUnderControlComparator parentToChildComparator = new AreaUnderControlComparator();
 
-        return new EMASWrapper(Optional.ofNullable(executionStats)
-                .map(stats -> {
-                    GenotypeProvider genotypeProvider = genotypeProviderFactorySupplier.get(genotypeProviderVersion).apply(problem, stats);
-                    return new CustomInitializationProgressiveEMAS(genotypeProvider, problem, bsfResultSaver, crossover, mutation, strongMutationOperator,
-                            maxIterations, numberOfIslands, envEnergy, initialResourceValue,
-                            transferResourceValue,
-                            "ProgressiveEliteAreaUnderControlWithDistanceArea",
-                            2,
-                            comparator,
-                            parentToChildComparator);
-                }).orElseGet(() -> new CustomInitializationProgressiveEMAS(problem, bsfResultSaver, crossover, mutation, strongMutationOperator,
-                        maxIterations, numberOfIslands, envEnergy, initialResourceValue,
-                        transferResourceValue,
-                        "ProgressiveEliteAreaUnderControlWithDistanceArea",
-                        2,
-                        comparator,
-                        parentToChildComparator)));
+
+        Optional<GenotypeProvider> genotypeProvider = Optional.ofNullable(executionStats)
+                .map(stats -> genotypeProviderFactorySupplier.get(genotypeProviderVersion).apply(problem, stats));
+
+        EmasBuilder emasBuilder = new EmasBuilder()
+                .withAlgorithmName(algorithmType)
+                .withComparator(comparator)
+                .withCrossoverOperator(crossover)
+                .withEnvEnergy(envEnergy)
+                .withInitialAgentResourceLevel(initialResourceValue)
+                .withInitialGenotypeProvider(genotypeProvider)
+                .withMaxNumberOfIterations(maxIterations)
+                .withMutationOperator(mutation)
+                .withNumberOfIslands(numberOfIslands)
+                .withParentToChildComparator(parentToChildComparator)
+                .withProblem(problem)
+                .withReplaceOnlyIfBetter(2)
+                .withResultSaver(bsfResultSaver)
+                .withStrongMutationOperator(strongMutationOperator)
+                .withTransferAgentResourceLevel(transferResourceValue);
+
+        if ("progressiveEmas".equalsIgnoreCase(emasType)) {
+            return emasBuilder
+                    .buildAsProgressive();
+        } else if ("globalRankEmas".equalsIgnoreCase(emasType)) {
+            return emasBuilder
+                    .buildAsGlobalRank();
+        } else if ("baseEmas".equalsIgnoreCase(emasType)) {
+            return emasBuilder
+                    .buildAsBase();
+        } else {
+            throw new IllegalStateException("Something got totally messed up because such emas doesn't exist");
+        }
     }
 
     private PermutationProblem<PermutationSolution<Integer>> getProblemInstance() {
