@@ -136,7 +136,7 @@ public abstract class ACO implements Observer {
 	 */
 	protected void initializePheromones() {
 		
-		LOGGER.info("Initializing the pheromones");
+		//LOGGER.info("Initializing the pheromones");
 		
 		this.graph.initialize(graphInitialization);
 	}
@@ -147,7 +147,7 @@ public abstract class ACO implements Observer {
 	 */
 	protected void initializeAnts() {
 		
-		LOGGER.debug("Initializing the ants");
+		//LOGGER.debug("Initializing the ants");
 		
 		this.ants = new Ant[numberOfAnts];
 
@@ -201,7 +201,7 @@ public abstract class ACO implements Observer {
 	private synchronized void constructAntsSolutions() {
 		
 		LOGGER.debug("=================== Iteration " + it + " ===================");
-		LOGGER.debug("Constructing the ant's solutions");
+		//LOGGER.debug("Constructing the ant's solutions");
 		
 		//Before construct the ant's solution it is necessary to remove the current best solution
 		currentBest = null;
@@ -226,7 +226,7 @@ public abstract class ACO implements Observer {
 	public void daemonActions() {
 		
 		if(daemonActions.isEmpty()){
-			LOGGER.debug("There are no daemon actions for this algorithm");
+			//LOGGER.debug("There are no daemon actions for this algorithm");
 		}else{
 			LOGGER.debug("Executing daemon actions");
 		}
@@ -258,15 +258,15 @@ public abstract class ACO implements Observer {
 			globalBest = ant.clone();
 		}
 		
-		LOGGER.debug(ant);
+		//LOGGER.debug(ant);
 
 		// Verify if all ants have finished their search
 		if (++finishedAnts == numberOfAnts) {
 			// Restart the counter to build the solutions again
 			finishedAnts = 0;
 			
-			LOGGER.debug("Current-best: " + currentBest);
-			LOGGER.info("Global-best: " + globalBest);			
+			//LOGGER.debug("Current-best: " + currentBest);
+			//LOGGER.info("Global-best: " + globalBest);
 			
 			// Continue all execution
 			notify();
@@ -413,7 +413,7 @@ public abstract class ACO implements Observer {
 	 * Print the parameters
 	 */
 	protected void printParameters(){
-		LOGGER.info("=================== Parameters ===================");
+		/*LOGGER.info("=================== Parameters ===================");
 		LOGGER.info("Derivation: " + this.toString());
 		LOGGER.info("Problem: " + this.problem);
 		LOGGER.info("Number of Ants: " + this.numberOfAnts);
@@ -427,7 +427,7 @@ public abstract class ACO implements Observer {
 		LOGGER.info("Evaporations: " + this.evaporations);
 		LOGGER.info("Deposits: " + this.deposits);
 		LOGGER.info("Daemon Actions: " + this.daemonActions);
-		LOGGER.info("==================================================");
+		LOGGER.info("==================================================");       */
 	}
 
 	/**

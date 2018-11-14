@@ -40,11 +40,11 @@ public class ExecutionStats {
 	}
 
 	public void printStats() {
-		LOGGER.info("==================================================");
+		/*LOGGER.info("==================================================");
 		LOGGER.info("Execution Time: " + executionTime);
 		LOGGER.info("Best Value: " + problem.evaluate(bestSolution));
 		LOGGER.info("Best Solution: " + Arrays.toString(bestSolution));
-		LOGGER.info("==================================================");
+		LOGGER.info("==================================================");*/
 	}
 
 	public void printDotFormat() {

@@ -17,6 +17,7 @@ public class CustomInitializationSteadyStateGeneticAlgorithm extends SteadyState
 
     private final BSFResultSaver resultSaver;
     private final GenotypeProvider initialGenotypesProvider;
+    private int evolution_counter = 0;
 
     CustomInitializationSteadyStateGeneticAlgorithm(Problem<PermutationSolution<Integer>> problem,
                                                            BSFResultSaver resultSaver,
@@ -58,7 +59,10 @@ public class CustomInitializationSteadyStateGeneticAlgorithm extends SteadyState
 
     @Override
     protected List<PermutationSolution<Integer>> selection(List<PermutationSolution<Integer>> population){
-        resultSaver.recordCheckpoint(getResult().getObjective(0), "evo");
+        if(evolution_counter % population.size() == 0) {
+            resultSaver.recordCheckpoint(getResult().getObjective(0), "evo");
+        }
+        evolution_counter++;
         return super.selection(population);
     }
 }
