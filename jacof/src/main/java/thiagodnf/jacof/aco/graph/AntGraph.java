@@ -79,8 +79,8 @@ public class AntGraph {
 			}
 		}
 
-		LOGGER.debug("Creating a graph with " + numberOfNodes + " nodes and T0=" + t0);
-		LOGGER.debug("tMin=" + tMin + " and tMax" + tMax);
+		//LOGGER.debug("Creating a graph with " + numberOfNodes + " nodes and T0=" + t0);
+		//LOGGER.debug("tMin=" + tMin + " and tMax" + tMax);
 	}
 	
 	/**

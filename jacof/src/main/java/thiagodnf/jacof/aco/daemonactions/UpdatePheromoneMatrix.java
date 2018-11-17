@@ -22,7 +22,7 @@ public class UpdatePheromoneMatrix extends AbstractDaemonActions {
 	@Override
 	public void doAction() {
 		
-		LOGGER.debug("Updating the pheromone matrix values");
+		//LOGGER.debug("Updating the pheromone matrix values");
 		
 		for (int i = 0; i < aco.getProblem().getNumberOfNodes(); i++) {
 

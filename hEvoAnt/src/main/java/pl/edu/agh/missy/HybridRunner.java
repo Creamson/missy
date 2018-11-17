@@ -43,12 +43,12 @@ public class HybridRunner {
         resultSaver.startTracking();
 
         for (int i = 0; i < numberOfIterations; i++) {
-            if (shouldRunEvo) {
-                population = runGeneticSample(stats);
-                resultSaver.flushResults();
-            }
             if (shouldRunAco) {
                 stats = runAntSample(population);
+                resultSaver.flushResults();
+            }
+            if (shouldRunEvo) {
+                population = runGeneticSample(stats);
                 resultSaver.flushResults();
             }
         }

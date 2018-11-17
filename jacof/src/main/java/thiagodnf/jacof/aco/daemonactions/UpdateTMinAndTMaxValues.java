@@ -39,7 +39,7 @@ public class UpdateTMinAndTMaxValues extends AbstractDaemonActions {
 	@Override
 	public void doAction() {
 		
-		LOGGER.debug("Verifing if the pheromone limits should be updated");
+		//LOGGER.debug("Verifing if the pheromone limits should be updated");
 		
 		if (bestSoFar == null) {
 			bestSoFar = aco.getGlobalBest().clone();
@@ -54,12 +54,12 @@ public class UpdateTMinAndTMaxValues extends AbstractDaemonActions {
 	
 	protected void updateMinAndMaxValues() {
 
-		LOGGER.info("Yes. The tMin and tMax should be updated");
+		//LOGGER.info("Yes. The tMin and tMax should be updated");
 
 		aco.getGraph().setTMax(1.0 / (rate * bestSoFar.getTourLength()));
 		aco.getGraph().setTMin(aco.getGraph().getTMax() / 10.0);
 
-		LOGGER.info("Now tMin=" + aco.getGraph().getTMin() + " and tMax=" + aco.getGraph().getTMax());
+		//LOGGER.info("Now tMin=" + aco.getGraph().getTMin() + " and tMax=" + aco.getGraph().getTMax());
 	}
 	
 	@Override
