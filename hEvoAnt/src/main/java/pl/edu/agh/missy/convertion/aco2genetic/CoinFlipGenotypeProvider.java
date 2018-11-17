@@ -7,9 +7,10 @@ import thiagodnf.jacof.aco.ACO;
 import thiagodnf.jacof.aco.ant.Ant;
 import thiagodnf.jacof.util.ExecutionStats;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 public class CoinFlipGenotypeProvider implements GenotypeProvider {
 
@@ -45,19 +46,20 @@ public class CoinFlipGenotypeProvider implements GenotypeProvider {
             while (!nodesToVisit.isEmpty()) {
 
                 int nextNode = -1;
-                Set<Integer> rejectedNodes = new HashSet<>();
                 // Get the next node given the current node
                 boolean nodeAccepted = false;
-                while (!nodeAccepted && rejectedNodes.size() < nodesToVisit.size()) {
-                    nextNode = aco.getAntExploration().getNextNode(this, currentNode);
-                    if (!rejectedNodes.contains(nextNode) && ThreadLocalRandom.current().nextBoolean()) {
+                List<Integer> nodesToVisitPrevious = newArrayList(nodesToVisit);
+                while (!nodeAccepted && nodesToVisit.size() > 0) {
+                    nextNode = aco.getAntExploration().getNextNode(this, currentNode); // This may still return same vertex multiple times
+                    if (ThreadLocalRandom.current().nextBoolean()) {
                         nodeAccepted = true;
                     } else {
-                        rejectedNodes.add(nextNode);
+                        nodesToVisit.remove(new Integer(nextNode));
                     }
                 }
 
-                // Remove the next node from the list of nodes to visit
+                // Remove the next node from the original list of nodes to visit
+                nodesToVisit = nodesToVisitPrevious;
                 nodesToVisit.remove(new Integer(nextNode));
 
                 // Save the next node in the tour
