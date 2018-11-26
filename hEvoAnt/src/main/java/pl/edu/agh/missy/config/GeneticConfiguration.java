@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
@@ -56,10 +55,12 @@ public class GeneticConfiguration {
     private String genotypeProviderVersion;
     @Value("${genetic.algorithmType}")
     private String algorithmType;
+    @Value("${genetic.coinCoinFlip.acceptanceThreshold:0.5}")
+    private double coinFlipAcceptanceThreshold;
 
     private final Map<String, BiFunction<PermutationProblem<PermutationSolution<Integer>>, ExecutionStats, GenotypeProvider>> genotypeProviderFactorySupplier = ImmutableMap.of(
             "simple", SimpleLastPathBasedGenotypeProvider::new,
-            "coinflip", CoinFlipGenotypeProvider::new,
+            "coinflip", (problem, stats) -> new CoinFlipGenotypeProvider(problem, stats, coinFlipAcceptanceThreshold),
             "evaporation", (p, e) -> new EvaporationGenotypeProvider(p, e, evaporationRate)
     );
 

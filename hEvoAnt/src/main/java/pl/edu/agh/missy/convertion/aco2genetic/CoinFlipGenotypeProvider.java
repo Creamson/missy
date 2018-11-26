@@ -16,12 +16,13 @@ public class CoinFlipGenotypeProvider implements GenotypeProvider {
 
     private PermutationProblem<PermutationSolution<Integer>> problem;
     private final ACO aco;
+    private double acceptanceThreshold;
     private int lastId = 0;
 
-    public CoinFlipGenotypeProvider(PermutationProblem<PermutationSolution<Integer>> problem, ExecutionStats stats) {
+    public CoinFlipGenotypeProvider(PermutationProblem<PermutationSolution<Integer>> problem, ExecutionStats stats, double acceptanceThreshold) {
         this.problem = problem;
         this.aco = stats.aco;
-
+        this.acceptanceThreshold = acceptanceThreshold;
     }
 
     @Override
@@ -35,9 +36,9 @@ public class CoinFlipGenotypeProvider implements GenotypeProvider {
         );
     }
 
-    private static class CoinFlipAnt extends Ant {
+    private class CoinFlipAnt extends Ant {
 
-        public CoinFlipAnt(ACO aco, int id) {
+        private CoinFlipAnt(ACO aco, int id) {
             super(aco, id);
         }
 
@@ -51,7 +52,7 @@ public class CoinFlipGenotypeProvider implements GenotypeProvider {
                 List<Integer> nodesToVisitPrevious = newArrayList(nodesToVisit);
                 while (!nodeAccepted && nodesToVisit.size() > 0) {
                     nextNode = aco.getAntExploration().getNextNode(this, currentNode); // This may still return same vertex multiple times
-                    if (ThreadLocalRandom.current().nextBoolean()) {
+                    if (ThreadLocalRandom.current().nextDouble() >= CoinFlipGenotypeProvider.this.acceptanceThreshold) {
                         nodeAccepted = true;
                     } else {
                         nodesToVisit.remove(new Integer(nextNode));
