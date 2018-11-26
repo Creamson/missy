@@ -55,12 +55,12 @@ public class GeneticConfiguration {
     private String genotypeProviderVersion;
     @Value("${genetic.algorithmType}")
     private String algorithmType;
-    @Value("${genetic.coinCoinFlip.acceptanceThreshold:0.5}")
-    private double coinFlipAcceptanceThreshold;
+    @Value("${genetic.coinCoinFlip.acceptanceProbability:0.5}")
+    private double coinFlipAcceptanceProbability;
 
     private final Map<String, BiFunction<PermutationProblem<PermutationSolution<Integer>>, ExecutionStats, GenotypeProvider>> genotypeProviderFactorySupplier = ImmutableMap.of(
             "simple", SimpleLastPathBasedGenotypeProvider::new,
-            "coinflip", (problem, stats) -> new CoinFlipGenotypeProvider(problem, stats, coinFlipAcceptanceThreshold),
+            "coinflip", (problem, stats) -> new CoinFlipGenotypeProvider(problem, stats, coinFlipAcceptanceProbability),
             "evaporation", (p, e) -> new EvaporationGenotypeProvider(p, e, evaporationRate)
     );
 
