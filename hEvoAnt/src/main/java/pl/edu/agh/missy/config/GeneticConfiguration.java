@@ -55,7 +55,7 @@ public class GeneticConfiguration {
     private String genotypeProviderVersion;
     @Value("${genetic.algorithmType}")
     private String algorithmType;
-    @Value("${genetic.coinCoinFlip.acceptanceProbability:0.5}")
+    @Value("${genetic.coinFlip.acceptanceProbability:0.5}")
     private double coinFlipAcceptanceProbability;
 
     private final Map<String, BiFunction<PermutationProblem<PermutationSolution<Integer>>, ExecutionStats, GenotypeProvider>> genotypeProviderFactorySupplier = ImmutableMap.of(
