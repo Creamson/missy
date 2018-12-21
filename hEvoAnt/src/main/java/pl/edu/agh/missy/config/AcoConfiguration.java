@@ -13,8 +13,7 @@ import pl.edu.agh.missy.convertion.genetic2aco.PheromonesInitializer;
 import pl.edu.agh.missy.convertion.genetic2aco.SingleDepositionPerGenotypeInitializer;
 import pl.edu.agh.missy.results.BSFResultSaver;
 import pl.edu.agh.missy.results.SaveResultDaemon;
-import thiagodnf.jacof.aco.ACO;
-import thiagodnf.jacof.aco.AntSystem;
+import thiagodnf.jacof.aco.*;
 import thiagodnf.jacof.aco.daemonactions.AbstractDaemonActions;
 import thiagodnf.jacof.problem.Problem;
 import thiagodnf.jacof.problem.tsp.TravellingSalesmanProblem;
@@ -59,6 +58,14 @@ public class AcoConfiguration {
     private double beta;
     @Value("${aco.rho:0.1}")
     private double rho;
+    @Value("${aco.mmas.stagnation:20}")
+    private int stagnation;
+    @Value("${aco.acs.omega:0.1}")
+    private double omega;
+    @Value("${aco.acs.q0:0.9}")
+    private double q0;
+    @Value("${aco.easORrbas.weight:6}")
+    private int weight;
 
 
     private TravellingSalesmanProblem getAcoProblem() {
@@ -84,12 +91,24 @@ public class AcoConfiguration {
         aco.setAlpha(alpha);
         aco.setBeta(beta);
         aco.setRho(rho);
+        setSpecificParameters(aco);
 
         List<AbstractDaemonActions> actions = new LinkedList<>();
         actions.add(new SaveResultDaemon(bsfResultSaver, aco));
-        aco.setDaemonActions(actions) ;
+        aco.setDaemonActions(actions);
 
         return aco;
+    }
+
+    private void setSpecificParameters(ACO aco) {
+        if (aco instanceof MaxMinAntSystem) {
+            ((MaxMinAntSystem) aco).setStagnation(stagnation);
+        } else if (aco instanceof AntColonySystem) {
+            ((AntColonySystem) aco).setOmega(omega);
+            ((AntColonySystem) aco).setQ0(q0);
+        } else if (aco instanceof ElitistAntSystem) {
+            ((ElitistAntSystem) aco).setWeight(weight);
+        }
     }
 
     @Bean

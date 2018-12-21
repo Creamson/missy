@@ -9,7 +9,7 @@ import pl.edu.agh.missy.results.BSFResultSaver;
 import java.io.IOException;
 
 @Configuration
-//@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.properties")
 public class ResultSavingConfiguration {
     @Value("${results.fileName:problem_algo_code}")
     public String resultsFileName;
